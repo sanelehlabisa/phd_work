@@ -1,8 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 
-% ------------------------------------------------
 % Packages
-% ------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -10,9 +8,9 @@
 \usepackage{cite}
 \usepackage{hyperref}
 
-% ------------------------------------------------
+% =============================
 % Title
-% ------------------------------------------------
+% =============================
 \title{A Deep Learning Model for Abnormal Human Activity Recognition}
 \author{Sanele Hlabisa \\
 University of KwaZulu-Natal \\
@@ -23,42 +21,41 @@ University of KwaZulu-Natal \\
 
 \maketitle
 
-% ==================================================
+% =============================
 % Abstract
-% ==================================================
+% =============================
 \begin{abstract}
-% Write your abstract here.
+
 \end{abstract}
 
-% ==================================================
+% =============================
+% Introduction
+% =============================
 \section{Introduction}
-% --------------------------------------------------
+
 \subsection{Background}
-% Write background here.
 
 \subsection{Motivation}
-% Write motivation here.
 
 \subsection{Contributions}
-% List contributions here.
 
-
-% ==================================================
+% =============================
+% Related Work
+% =============================
 \section{Related Work}
-% --------------------------------------------------
+
 \subsection{Traditional Approaches}
-% Related classical methods.
 
 \subsection{Deep Learning Approaches}
-% Related deep learning works.
 
 \subsection{Summary of Gaps}
 % What is missing in literature?
 
-
-% ==================================================
+% =============================
+% Proposed Method
+% =============================
 \section{Proposed Method}
-% --------------------------------------------------
+
 \subsection{Problem Formulation}
 % Define problem mathematically if needed.
 
@@ -72,14 +69,38 @@ University of KwaZulu-Natal \\
 % Hardware, dataset split, preprocessing.
 
 
-% ==================================================
+% =============================
+% Experimental Results
+% =============================
 \section{Experimental Results}
-% --------------------------------------------------
+
 \subsection{Dataset Description}
 % Describe dataset.
+During this resarch we used the 
+
+Abnormal Activities 11 classes ~1070 videos
+Classes
+    Knife Hazard:
+    Robery:
+    Pollution:
+    Harrasment:
+    Property Damage:
+    Hijack:
+    Terrorism:
+    Begging:
+    Normal Videos:
+    Drunkeness:
+
+AIRTLab has 2 classes Violence and Non Violence: and ~350 videos, recoded with camera fromdifferen tviews
+Classes:
+    Violence:
+    Non-Vidoence:
+
+Train test split used for this experiment was 70:15:15 for train, validation and test dataset
 
 \subsection{Evaluation Metrics}
 % Accuracy, F1, etc.
+Accuracy, Precision, Recall, F1 Score and Confusion Matrixs where choosen as perforamce indicators for the proposed ConvLSTM model
 
 \subsection{Quantitative Results}
 % Tables and comparisons.
@@ -88,29 +109,30 @@ University of KwaZulu-Natal \\
 % Optional.
 
 
-% ==================================================
+% =============================
+% Discussion
+% =============================
 \section{Discussion}
-% --------------------------------------------------
+
 \subsection{Analysis of Results}
 % Interpret results.
 
 \subsection{Limitations}
 % Weaknesses.
 
-
-% ==================================================
+% =============================
+% Conclusion and Future Work
+% =============================
 \section{Conclusion and Future Work}
-% --------------------------------------------------
+
 \subsection{Conclusion}
 % Summarize findings.
 
 \subsection{Future Work}
 % Next steps.
 
-
-% ==================================================
 % References
-% ==================================================
+
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
