@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage{cite}
 \usepackage{hyperref}
+\usepackage{array}
 
 % =============================
 % Title
@@ -74,27 +75,31 @@ University of KwaZulu-Natal \\
 % =============================
 \section{Experimental Results}
 
+This section discusses results acahived during the experiments of this research
+
+\subsection{Machine Specification}
+
 \subsection{Dataset Description}
 % Describe dataset.
 During this resarch we used the 
 
 Abnormal Activities 11 classes ~1070 videos
 Classes
-    Knife Hazard:
+    Knife Hazard: Threatning someone with a knife.
     Robery:
-    Pollution:
-    Harrasment:
-    Property Damage:
+    Pollution: throwing trash, polluting
+    Harrasment: in appropitae gestures
+    Property Damage: Demaging property
     Hijack:
-    Terrorism:
-    Begging:
-    Normal Videos:
-    Drunkeness:
+    Terrorism: soemone placess a bag with a bomb, show  or start shooting people
+    Begging: asking for money
+    Normal Videos: Non of the above abnoraml activities found
+    Drunkeness: someone having problem with balance and stability
 
 AIRTLab has 2 classes Violence and Non Violence: and ~350 videos, recoded with camera fromdifferen tviews
 Classes:
-    Violence:
-    Non-Vidoence:
+    Violence: Fighting, shooting
+    Non-Vidoence: Non of the above activities found
 
 Train test split used for this experiment was 70:15:15 for train, validation and test dataset
 
@@ -104,6 +109,65 @@ Accuracy, Precision, Recall, F1 Score and Confusion Matrixs where choosen as per
 
 \subsection{Quantitative Results}
 % Tables and comparisons.
+A. Abnormal Activities results are shown on the table and figure below:
+
+\begin{table}[h!]
+    \center
+    \begin{tabular}{rccc}
+        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) \\
+        % 3D Resnet50     & 36.19           & 31.54          & 47.07       & 28.42         \\
+        % 3D Resnet101    & 61.91           & 58.64          & 79.25       & 57.27         \\
+        % 3D Resnet152    & 90.47           & 91.36          & 93.62       & 90.31         \\
+        % ConvLSTM        & 92.38           & 89.68          & 90.50       & 89.93         \\
+        PaperConvLSTM   & 96.19           & 96.50          & 96.85       & 96.42         \\
+        Proposed Model  & .....             & .....            & .....         & .....           \\
+    \end{tabular}
+    \caption{A basic LaTeX table example.}
+\end{table}
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=0.5\textwidth]{figures/confusion_matrix_paper_conv_lstm_airtlab_dataset.png}
+    \caption{Confusion Matrix of the PaperConvLSTM on Abnormal Activities dataset.}
+    \label{fig:my_image}
+\end{figure}
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=0.5\textwidth]{figures/confusion_matrix_proposed_model_airtlab_dataset.png}
+    \caption{Confusion Matrix of the Proposed Model on Abnoraml Activities dataset.}
+    \label{fig:my_image}
+\end{figure}
+
+B. AIRLab results are show on the table and figure below:
+
+\begin{table}[h!]
+    \center
+    \begin{tabular}{rccc}
+        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) \\
+        % 3D Resnet50     & .....           & .....          & .....       & .....         \\
+        % 3D Resnet101    & .....           & .....          & .....       & .....         \\
+        % 3D Resnet152    & 91.42           & .....          & .....       & 90.49         \\
+        % ConvLSTM        & 97.15           & .....          & .....       & 96.89         \\
+        PaperConvLSTM   & 98.29           & .....          & .....       & 97.66         \\
+        Proposed Model  & ...             & ...            & ...         & ...           \\
+    \end{tabular}
+    \caption{A basic LaTeX table example.}
+\end{table}
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=0.5\textwidth]{figures/confusion_matrix_paper_conv_lstm_airtlab_dataset.png}
+    \caption{Confusion Matrix of the PaperConvLSTM on AIRLab dataset.}
+    \label{fig:my_image}
+\end{figure}
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=0.5\textwidth]{figures/confusion_matrix_proposed_model_airtlab_dataset.png}
+    \caption{Confusion Matrix of the Proposed Model on AIRLab dataset.}
+    \label{fig:my_image}
+\end{figure}
 
 \subsection{Ablation Study}
 % Optional.
