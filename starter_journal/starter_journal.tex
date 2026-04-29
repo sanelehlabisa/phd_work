@@ -78,6 +78,8 @@ University of KwaZulu-Natal \\
 This section discusses results acahived during the experiments of this research
 
 \subsection{Machine Specification}
+% Describe the machine's specifications
+Experiments were performed on a Google Colab virtual machine running Linux (kernel 6.6), equipped with a 12-core x86\_64 CPU and 167~GB of RAM. GPU acceleration was provided by an NVIDIA A100 Tensor Core GPU (40~GB VRAM) with CUDA~13.0 (driver version 580.82.07).
 
 \subsection{Dataset Description}
 % Describe dataset.
@@ -120,7 +122,8 @@ A. Abnormal Activities results are shown on the table and figure below:
         % 3D Resnet152    & 90.47           & 91.36          & 93.62       & 90.31         \\
         % ConvLSTM        & 92.38           & 89.68          & 90.50       & 89.93         \\
         PaperConvLSTM   & 96.19           & 96.50          & 96.85       & 96.42         \\
-        Proposed Model  & .....             & .....            & .....         & .....           \\
+        ReplicaConvLSTM & 88.73           & 88.26          & 86.73       & 87.41         \\
+        Proposed Model  & .....             & .....            & .....         & .....   \\
     \end{tabular}
     \caption{A basic LaTeX table example.}
 \end{table}
@@ -150,6 +153,7 @@ B. AIRLab results are show on the table and figure below:
         % 3D Resnet152    & 91.42           & .....          & .....       & 90.49         \\
         % ConvLSTM        & 97.15           & .....          & .....       & 96.89         \\
         PaperConvLSTM   & 98.29           & .....          & .....       & 97.66         \\
+        ReplicaConvLSTM & 97.21           & 97.24          & 96.42       & 96.48         \\
         Proposed Model  & ...             & ...            & ...         & ...           \\
     \end{tabular}
     \caption{A basic LaTeX table example.}
