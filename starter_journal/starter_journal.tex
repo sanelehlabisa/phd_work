@@ -45,23 +45,40 @@ By effectively capturing spatio-temporal features from video data, this research
 
 \subsection{Background}
 
-The rapid growth of surveillance systems in urban environments has created a strong demand for intelligent methods capable of automatically detecting anomalous human activities in real time \cite{sultani2018, arshad2022}. Surveillance cameras are now widely deployed in public spaces such as shopping malls, universities, transportation hubs, airports, and smart cities to improve public safety and assist law enforcement agencies. However, continuously monitoring large volumes of surveillance footage manually is labor-intensive, time-consuming, and highly prone to human error, particularly in crowded and dynamic environments \cite{arshad2022, mohan2019}. As a result, automated Human Activity Recognition (HAR) and anomaly detection systems have become an important research area in computer vision and deep learning.
+The rapid growth of surveillance systems in urban environments has created a strong demand for intelligent methods capable of automatically detecting anomalous human activities in real time \cite{sultani2018, arshad2022}. 
+Surveillance cameras are now widely deployed in public spaces such as shopping malls, universities, transportation hubs, airports, and smart cities to improve public safety and assist law enforcement agencies. 
+However, continuously monitoring large volumes of surveillance footage manually is labor-intensive, time-consuming, and highly prone to human error, particularly in crowded and dynamic environments \cite{arshad2022, mohan2019}. 
+As a result, automated Human Activity Recognition (HAR) and anomaly detection systems have become an important research area in computer vision and deep learning.
 
-Recent advancements in artificial intelligence (AI), machine learning, and deep learning have significantly improved the ability of systems to analyze video data and identify suspicious activities automatically \cite{ozyer2021, khan2022}. Deep learning architectures such as Convolutional Neural Networks (CNNs), 3D CNNs, recurrent neural networks, and ConvLSTM models have demonstrated strong performance in learning spatial and temporal patterns from video sequences \cite{vrskova2022, challa2021}. These models enable surveillance systems to recognize complex abnormal activities such as fighting, theft, robbery, and violent behavior without relying heavily on handcrafted features.
+Recent advancements in artificial intelligence (AI), machine learning, and deep learning have significantly improved the ability of systems to analyze video data and identify suspicious activities automatically \cite{ozyer2021, khan2022}. 
+Deep learning architectures such as Convolutional Neural Networks (CNNs), 3D CNNs, recurrent neural networks, and ConvLSTM models have demonstrated strong performance in learning spatial and temporal patterns from video sequences \cite{vrskova2022, challa2021}. 
+These models enable surveillance systems to recognize complex abnormal activities such as fighting, theft, robbery, and violent behavior without relying heavily on handcrafted features.
 
-Despite these advancements, anomaly detection in surveillance videos remains a challenging task. Real-world surveillance footage often contains low-resolution frames, noise, illumination changes, occlusions, camera motion, and complex backgrounds that negatively affect model performance \cite{sunil2021, vrskova2022}. Furthermore, many publicly available datasets are limited in diversity, contain staged scenarios, or suffer from class imbalance, reducing the generalization ability of trained models \cite{cheng2020, arshad2022}. These challenges highlight the need for robust deep learning methods capable of accurately classifying anomalous activities across diverse real-world conditions.
+Despite these advancements, anomaly detection in surveillance videos remains a challenging task. 
+Real-world surveillance footage often contains low-resolution frames, noise, illumination changes, occlusions, camera motion, and complex backgrounds that negatively affect model performance \cite{sunil2021, vrskova2022}. 
+Furthermore, many publicly available datasets are limited in diversity, contain staged scenarios, or suffer from class imbalance, reducing the generalization ability of trained models \cite{cheng2020, arshad2022}. 
+These challenges highlight the need for robust deep learning methods capable of accurately classifying anomalous activities across diverse real-world conditions.
 
 \subsection{Motivation}
 
-Traditional surveillance systems rely heavily on human operators to monitor video streams continuously. However, prolonged monitoring often results in fatigue, delayed responses, missed events, and false alarms \cite{mohan2019}. As surveillance infrastructures continue to expand, the volume of generated video data has become too large for efficient manual analysis. This limitation motivates the development of automated intelligent systems that can detect anomalous activities accurately and efficiently in real time.
+Traditional surveillance systems rely heavily on human operators to monitor video streams continuously. 
+However, prolonged monitoring often results in fatigue, delayed responses, missed events, and false alarms \cite{mohan2019}. 
+As surveillance infrastructures continue to expand, the volume of generated video data has become too large for efficient manual analysis. 
+This limitation motivates the development of automated intelligent systems that can detect anomalous activities accurately and efficiently in real time.
 
-Although several AI-based approaches have been proposed for anomaly detection, many existing methods still face important limitations. Some approaches depend on handcrafted feature extraction techniques that do not generalize well to unseen environments \cite{arshad2022}. Others require extensive computational resources, making them unsuitable for real-time deployment on practical surveillance systems \cite{sunil2021}. In addition, current models often struggle when dealing with noisy surveillance footage, varying viewpoints, and dynamic scenes, leading to high false-positive rates and reduced reliability \cite{vrskova2022, dirgova2022}.
+Although several AI-based approaches have been proposed for anomaly detection, many existing methods still face important limitations. 
+Some approaches depend on handcrafted feature extraction techniques that do not generalize well to unseen environments \cite{arshad2022}. 
+Others require extensive computational resources, making them unsuitable for real-time deployment on practical surveillance systems \cite{sunil2021}. 
+In addition, current models often struggle when dealing with noisy surveillance footage, varying viewpoints, and dynamic scenes, leading to high false-positive rates and reduced reliability \cite{vrskova2022, dirgova2022}.
 
-Deep learning architectures that combine spatial and temporal feature extraction provide an opportunity to improve the robustness and effectiveness of anomaly classification systems. In particular, ConvLSTM-based approaches can capture both appearance information and temporal motion dynamics from sequential video frames, making them suitable for abnormal activity recognition tasks \cite{vrskova2022}. Motivated by these challenges and opportunities, this study investigates a deep learning-based approach for classifying anomalous activities in surveillance videos using spatio-temporal learning techniques.
+Deep learning architectures that combine spatial and temporal feature extraction provide an opportunity to improve the robustness and effectiveness of anomaly classification systems. 
+In particular, ConvLSTM-based approaches can capture both appearance information and temporal motion dynamics from sequential video frames, making them suitable for abnormal activity recognition tasks \cite{vrskova2022}. 
+Motivated by these challenges and opportunities, this study investigates a deep learning-based approach for classifying anomalous activities in surveillance videos using spatio-temporal learning techniques.
 
 \subsection{Contributions}
 
-This study proposes a deep learning method for classifying anomalous activities in surveillance videos using spatio-temporal feature learning. The main contributions of this research are summarized as follows:
+This study proposes a deep learning method for classifying anomalous activities in surveillance videos using spatio-temporal feature learning. 
+The main contributions of this research are summarized as follows:
 
 \begin{enumerate}
     \item Development of a ConvLSTM-based deep learning framework for abnormal human activity classification in surveillance videos.
