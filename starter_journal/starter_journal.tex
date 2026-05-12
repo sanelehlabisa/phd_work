@@ -187,18 +187,22 @@ This research therefore investigates a ConvLSTM-based approach for classifying a
 
 \subsection{Problem Formulation}
 
-The objective of this study is to classify anomalous human activities in surveillance videos using a deep learning-based Human Activity Recognition (HAR) framework. Given a video sequence 
+The objective of this study is to classify anomalous human activities in surveillance videos using a deep learning-based Human Activity Recognition (HAR) framework. 
+Given a video sequence 
 $V = \{f_1, f_2, ..., f_T\}$ containing $T$ frames, the model learns a mapping function:
 
 \[
 F(V) \rightarrow y
 \]
 
-where $y$ represents the predicted activity class from a predefined set of normal and anomalous activities. The proposed approach focuses on learning both spatial and temporal representations directly from video frames using a ConvLSTM-based architecture.
+where $y$ represents the predicted activity class from a predefined set of normal and anomalous activities. 
+The proposed approach focuses on learning both spatial and temporal representations directly from video frames using a ConvLSTM-based architecture.
 
 \subsection{Model Architecture}
 
-Based on findings from previous studies \cite{vrskova2022convlstm, sernani2021violence, khan2022hybrid}, a ConvLSTM architecture was selected due to its ability to capture spatial and temporal dependencies simultaneously. Conventional CNN models are effective for extracting spatial features, while recurrent structures such as LSTMs are suitable for temporal sequence modeling. ConvLSTM combines both capabilities within a single architecture, making it well suited for video-based anomaly classification.
+Based on findings from previous studies \cite{vrskova2022convlstm, sernani2021violence, khan2022hybrid}, a ConvLSTM architecture was selected due to its ability to capture spatial and temporal dependencies simultaneously. 
+Conventional CNN models are effective for extracting spatial features, while recurrent structures such as LSTMs are suitable for temporal sequence modeling. 
+ConvLSTM combines both capabilities within a single architecture, making it well suited for video-based anomaly classification.
 
 The proposed model processes video clips with dimensions:
 
@@ -221,37 +225,38 @@ The architecture consists of the following stages:
 The model architecture is summarized in Algorithm~\ref{alg:model}.
 
 \begin{algorithm}[h]
-\caption{Proposed ConvLSTM Architecture}
-\label{alg:model}
-\begin{verbatim}
-Input: Video sequence (B, T, C, H, W)
+    \caption{Proposed ConvLSTM Architecture}
+    \label{alg:model}
+    \begin{verbatim}
+    Input: Video sequence (B, T, C, H, W)
 
-For each frame:
+    For each frame:
+        Apply Conv2D + ReLU
+
+    Pass sequence to ConvLSTM2D
+
+    Apply BatchNorm2D
+
     Apply Conv2D + ReLU
 
-Pass sequence to ConvLSTM2D
+    Apply Dropout
 
-Apply BatchNorm2D
+    Flatten features
 
-Apply Conv2D + ReLU
+    Dense(256) + ReLU
 
-Apply Dropout
+    Apply Dropout
 
-Flatten features
+    Dense(num_classes)
 
-Dense(256) + ReLU
-
-Apply Dropout
-
-Dense(num_classes)
-
-Output: Predicted activity class
-\end{verbatim}
+    Output: Predicted activity class
+    \end{verbatim}
 \end{algorithm}
 
 \subsection{Training Procedure}
 
-The model was trained using supervised learning with categorical activity labels. Cross-Entropy Loss was used as the objective function due to its effectiveness in multi-class classification problems.
+The model was trained using supervised learning with categorical activity labels. 
+Cross-Entropy Loss was used as the objective function due to its effectiveness in multi-class classification problems.
 
 \[
 \mathcal{L}_{CE} = - \sum_{i=1}^{C} y_i \log(\hat{y}_i)
@@ -259,19 +264,26 @@ The model was trained using supervised learning with categorical activity labels
 
 where $y_i$ represents the ground truth label and $\hat{y}_i$ represents the predicted probability for class $i$.
 
-The Adam optimizer was used with weight decay regularization to improve convergence and reduce overfitting. Dropout layers were also incorporated within the network to improve generalization performance.
+The Adam optimizer was used with weight decay regularization to improve convergence and reduce overfitting. 
+Dropout layers were also incorporated within the network to improve generalization performance.
 
-Several model configurations were experimentally evaluated, including different ConvLSTM filter sizes, dense layer dimensions, dropout rates, optimizers, and learning rates. This experimental approach was motivated by findings in the literature that model performance is highly dependent on architectural design and dataset characteristics \cite{arshad2022review, chen2021deep}. The final configuration was selected based on validation accuracy and generalization performance.
+Several model configurations were experimentally evaluated, including different ConvLSTM filter sizes, dense layer dimensions, dropout rates, optimizers, and learning rates. 
+This experimental approach was motivated by findings in the literature that model performance is highly dependent on architectural design and dataset characteristics \cite{arshad2022review, chen2021deep}. The final configuration was selected based on validation accuracy and generalization performance.
 
 \subsection{Implementation Details}
 
-Videos were uniformly sampled into fixed-length sequences to ensure consistent temporal input across all training samples. Short videos were padded by repeating the final frame, while longer videos were uniformly sampled to preserve temporal information.
+Videos were uniformly sampled into fixed-length sequences to ensure consistent temporal input across all training samples. 
+Short videos were padded by repeating the final frame, while longer videos were uniformly sampled to preserve temporal information.
 
-All frames were resized to $64 \times 64$ pixels before training. The dataset was divided into training, validation, and testing subsets using a ratio of 70\%, 15\%, and 15\%, respectively.
+All frames were resized to $64 \times 64$ pixels before training. 
+The dataset was divided into training, validation, and testing subsets using a ratio of 70\%, 15\%, and 15\%, respectively.
 
-Experiments were implemented in Python using PyTorch and Torchvision. Training was performed on NVIDIA GPU hardware using mini-batch gradient descent. Data loading was implemented using lazy-loading techniques to reduce memory usage and improve scalability when processing large surveillance datasets.
+Experiments were implemented in Python using PyTorch and Torchvision. 
+Training was performed on NVIDIA GPU hardware using mini-batch gradient descent. 
+Data loading was implemented using lazy-loading techniques to reduce memory usage and improve scalability when processing large surveillance datasets.
 
-To improve robustness and reduce overfitting, additional experiments were conducted using data augmentation techniques such as horizontal flipping, rotation, and color jittering. Model performance was evaluated using accuracy, precision, recall, F1-score, and validation loss.
+To improve robustness and reduce overfitting, additional experiments were conducted using data augmentation techniques such as horizontal flipping, rotation, and color jittering. 
+Model performance was evaluated using accuracy, precision, recall, F1-score, and validation loss.
 
 % =============================
 % Experimental Results
