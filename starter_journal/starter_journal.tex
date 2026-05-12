@@ -26,8 +26,17 @@ University of KwaZulu-Natal \\
 % Abstract
 % =============================
 \begin{abstract}
+The rise of surveillance cameras in urban areas necessitates automated systems for real-time detection of abnormal activities, essential for enhancing public safety.
+Traditional monitoring methods are often labor-intensive and prone to errors, especially in crowded environments.
+This research explores existing models, including transformer and 3D-based architectures, but finds that they often overfit due to their complexity and the staged nature of many datasets, making it difficult to generalize. 
+Additionally, the problem resembles a multi-class classification challenge that demands significant computational resources, highlighting the need for smaller, more efficient models.
 
+Consequently, we focus on a ConvLSTM model as the base architecture, which incorporates biases that facilitate faster learning.
+We address challenges posed by small and staged datasets, including the UCF-Crime and DCSASS datasets, which limit generalization capabilities. 
+Our proposed modifications to the ConvLSTM architecture achieved state-of-the-art performance, with precision, recall, F1-score, and accuracy averaging 96.15\%, 97.72\%, 97.43\%, and 97.37\%, respectively, across the Abnormal Activities, University of Central Florida, and AIRLab datasets. 
+By effectively capturing spatio-temporal features from video data, this research contributes to developing robust surveillance systems that enhance public safety in diverse settings.
 \end{abstract}
+
 
 % =============================
 % Introduction
