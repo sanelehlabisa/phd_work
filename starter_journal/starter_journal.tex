@@ -333,77 +333,63 @@ These metrics provide insight into both overall classification performance and c
 
 \textbf{A. Abnormal Activities Dataset Results}
 
-Table~\ref{tab:abnormal_results} presents the performance comparison between the proposed model and related ConvLSTM approaches on the Abnormal Activities dataset.
+Table~\ref{tab:abnormal_activities_dataset_results} presents the performance comparison between the proposed model and related ConvLSTM approaches on the Abnormal Activities dataset.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{lcccc}
         \hline
-        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) \\
+        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Parameters (M)       \\
         \hline
-        % 3D Resnet50     & 36.19           & 31.54          & 47.07       & 28.42         \\
-        % 3D Resnet101    & 61.91           & 58.64          & 79.25       & 57.27         \\
-        % 3D Resnet152    & 90.47           & 91.36          & 93.62       & 90.31         \\
-        % ConvLSTM        & 92.38           & 89.68          & 90.50       & 89.93         \\
-        PaperConvLSTM   & 96.19           & 96.50          & 96.85       & 96.42         \\
-        ReplicaConvLSTM & 88.73           & 88.26          & 86.73       & 87.41         \\
-        Proposed Model  & .....             & .....            & .....         & .....   \\
+        % 3D Resnet50     & 36.19           & 31.54          & 47.07       & 28.42         & ...         \\
+        % 3D Resnet101    & 61.91           & 58.64          & 79.25       & 57.27         & ...         \\
+        % 3D Resnet152    & 90.47           & 91.36          & 93.62       & 90.31         & ...         \\
+        % ConvLSTM        & 92.38           & 89.68          & 90.50       & 89.93         & ...         \\
+        PaperConvLSTM   & 96.19           & 96.50          & 96.85       & 96.42         & ...         \\
+        ReplicaConvLSTM & 97.20           & 96.70          & 97.28       & 96.69         & 500         \\
+        Proposed Model  & 97.20           & 96.61          & 97.80       & 97.02         & 8.61        \\
         \hline
     \end{tabular}
-    \caption{Performance comparison on the Abnormal Activities dataset.}
-    \label{tab:abnormal_results}
+    \caption{Performance comparison on the Abnormal Activities Dataset.}
+    \label{tab:abnormal_activities_dataset_results}
 \end{table}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.55\textwidth]{figures/confusion_matrix_paper_conv_lstm_abnormal_activities_dataset.png}
-    \caption{Confusion Matrix of the PaperConvLSTM model on the Abnormal Activities dataset.}
-    \label{fig:paper_abnormal_cm}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.55\textwidth]{figures/confusion_matrix_proposed_model_abnormal_activities_dataset.png}
+    \includegraphics[width=1.0\textwidth]{figures/confusion_matrix_proposed_model_abnormal_activities_dataset.png}
     \caption{Confusion Matrix of the Proposed Model on the Abnormal Activities dataset.}
     \label{fig:proposed_abnormal_cm}
 \end{figure}
 
 \vspace{0.3cm}
 
-\textbf{B. AIRTLab Dataset Results}
+\textbf{B. Violence Detection Dataset Results}
 
-Table~\ref{tab:airtlab_results} presents the performance comparison on the AIRTLab violence detection dataset.
+Table~\ref{tab:violence_detection_dataset_results} presents the performance comparison on the Violence Detection Dataset.
 
 \begin{table}[h!]
     \centering
     \begin{tabular}{lcccc}
         \hline
-        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) \\
+        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Parameters (M)       \\
         \hline
         % 3D Resnet101    & .....           & .....          & .....       & .....         \\
         % 3D Resnet152    & 91.42           & .....          & .....       & 90.49         \\
         % ConvLSTM        & 97.15           & .....          & .....       & 96.89         \\
-        PaperConvLSTM   & 98.29           & .....          & .....       & 97.66         \\
-        ReplicaConvLSTM & 97.21           & 97.24          & 96.42       & 96.48         \\
-        Proposed Model  & ...             & ...            & ...         & ...           \\
+        PaperConvLSTM   & 98.29           & .....          & .....       & 97.66         & ....        \\
+        ReplicaConvLSTM & 85.91           & 85.05          & 83.65       & 84.26         & 500         \\
+        Proposed Model  & 85.91           & 84.56          & 84.56       & 84.56         & 8.61        \\
         \hline
     \end{tabular}
-    \caption{Performance comparison on the AIRTLab dataset.}
-    \label{tab:airtlab_results}
+    \caption{Performance comparison on the Violence Detection Dataset.}
+    \label{tab:violence_detection_dataset_results}
 \end{table}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.55\textwidth]{figures/confusion_matrix_paper_conv_lstm_airtlab_dataset.png}
-    \caption{Confusion Matrix of the PaperConvLSTM model on the AIRTLab dataset.}
-    \label{fig:paper_airtlab_cm}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.55\textwidth]{figures/confusion_matrix_proposed_model_airtlab_dataset.png}
-    \caption{Confusion Matrix of the Proposed Model on the AIRTLab dataset.}
-    \label{fig:proposed_airtlab_cm}
+    \includegraphics[width=0.55\textwidth]{figures/confusion_matrix_proposed_model_violence_detection_dataset.png}
+    \caption{Confusion Matrix of the Proposed Model on the Violence Detection Dataset.}
+    \label{fig:proposed_violence_detection_dataset_cm}
 \end{figure}
 
 \subsection{Ablation Study}
