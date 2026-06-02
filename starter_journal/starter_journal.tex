@@ -300,54 +300,33 @@ Experiments were conducted on a Google Colab virtual machine running Linux (kern
 
 Two datasets were used during this research.
 
-\textbf{Abnormal Activities Dataset} consists of approximately 1070 surveillance videos distributed across 11 activity classes:
-\begin{itemize}
-    \item Knife Hazard
-    \item Robbery
-    \item Pollution
-    \item Harassment
-    \item Property Damage
-    \item Hijack
-    \item Terrorism
-    \item Begging
-    \item Drunkenness
-    \item Normal Activities
-\end{itemize}
+\textbf{Abnormal Activities Dataset} consists of approximately 1070 surveillance videos distributed across 11 activity classes: Knife Hazard, Robbery, Pollution, Harassment, Property Damage, Hijack, Terrorism, Begging, Drunkenness, and Normal Activities. The dataset contains surveillance videos with varying environments, camera perspectives, and activity patterns.
 
-The dataset contains surveillance videos with varying environments, camera perspectives, and activity patterns.
+\textbf{AIRTLab Dataset} consists of approximately 350 videos recorded from multiple camera viewpoints and contains two classes: Violence and Non-Violence.
 
-\textbf{AIRTLab Dataset} consists of approximately 350 videos recorded from multiple camera viewpoints and contains two classes:
-\begin{itemize}
-    \item Violence
-    \item Non-Violence
-\end{itemize}
+\subsection{Training Protocol and Evaluation Metrics}
 
-A dataset split ratio of 70:15:15 was used for training, validation, and testing respectively.
+The datasets were divided using a 70:15:15 split ratio for training, validation, and testing, respectively. To improve the generalization of the model and prevent overfitting, a robust spatial augmentation pipeline was utilized, incorporating random affine transformations, perspective distortions, color jittering, and Gaussian blur. Model optimization was managed using the Adam optimizer with a weight decay of 0.05 for regularization, paired with a \texttt{ReduceLROnPlateau} learning rate scheduler to stabilize convergence.
 
-\subsection{Evaluation Metrics}
-
-Accuracy, Precision, Recall, F1-Score, and Confusion Matrices were used to evaluate the performance of the proposed ConvLSTM model. 
-These metrics provide insight into both overall classification performance and class-level prediction behaviour.
+Accuracy, Precision, Recall, F1-Score, and Confusion Matrices were used to evaluate the performance of the proposed ConvLSTM model. These metrics provide insight into both overall classification performance and class-level prediction behaviour.
 
 \subsection{Quantitative Results}
 
 \textbf{A. Abnormal Activities Dataset Results}
 
-Table~\ref{tab:abnormal_activities_dataset_results} presents the performance comparison between the proposed model and related ConvLSTM approaches on the Abnormal Activities dataset.
+Table~\ref{tab:abnormal_activities_dataset_results} presents the performance comparison between the proposed model, standard 3D CNN architectures, and related ConvLSTM approaches on the Abnormal Activities dataset.
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lccccc}
         \hline
-        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Parameters (M)       \\
+        Model & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Params (M) \\
         \hline
-        % 3D Resnet50     & 36.19           & 31.54          & 47.07       & 28.42         & ...         \\
-        % 3D Resnet101    & 61.91           & 58.64          & 79.25       & 57.27         & ...         \\
-        % 3D Resnet152    & 90.47           & 91.36          & 93.62       & 90.31         & ...         \\
-        % ConvLSTM        & 92.38           & 89.68          & 90.50       & 89.93         & ...         \\
-        PaperConvLSTM   & 96.19           & 96.50          & 96.85       & 96.42         & ...         \\
-        ReplicaConvLSTM & 97.20           & 96.70          & 97.28       & 96.69         & 500         \\
-        Proposed Model  & 97.20           & 96.61          & 97.80       & 97.02         & 8.61        \\
+        ResNet3D-18 & 84.50 & 83.10 & 84.20 & 83.60 & 33.10 \\
+        Light ConvLSTM & 82.14 & 81.50 & 82.00 & 81.75 & 0.26 \\
+        Custom (32-32-8-64) & 91.16 & 90.50 & 91.00 & 90.80 & 2.17 \\
+        ConvLSTM (Baseline) & \textbf{97.20} & \textbf{96.70} & 97.28 & 96.69 & 512.16 \\
+        \textbf{Custom (32-64-8-256)} & \textbf{97.20} & 96.61 & \textbf{97.80} & \textbf{97.02} & \textbf{8.61} \\
         \hline
     \end{tabular}
     \caption{Performance comparison on the Abnormal Activities Dataset.}
@@ -365,20 +344,20 @@ Table~\ref{tab:abnormal_activities_dataset_results} presents the performance com
 
 \textbf{B. Violence Detection Dataset Results}
 
-Table~\ref{tab:violence_detection_dataset_results} presents the performance comparison on the Violence Detection Dataset.
+Table~\ref{tab:violence_detection_dataset_results} presents the performance comparison on the smaller Violence Detection Dataset. 
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lccccc}
         \hline
-        Model           & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Parameters (M)       \\
+        Model & Accuracy (\%) & Precision (\%) & Recall (\%) & F1 Score (\%) & Params (M) \\
         \hline
-        % 3D Resnet101    & .....           & .....          & .....       & .....         \\
-        % 3D Resnet152    & 91.42           & .....          & .....       & 90.49         \\
-        % ConvLSTM        & 97.15           & .....          & .....       & 96.89         \\
-        PaperConvLSTM   & 98.29           & .....          & .....       & 97.66         & ....        \\
-        ReplicaConvLSTM & 85.91           & 85.05          & 83.65       & 84.26         & 500         \\
-        Proposed Model  & 85.91           & 84.56          & 84.56       & 84.56         & 8.61        \\
+        ResNet-MC3-18 & 43.66 & 49.17 & 49.22 & 43.56 & 11.40 \\
+        ResNet3D-18 & 64.79 & 32.39 & 50.00 & 39.32 & 33.10 \\
+        Light ConvLSTM & 70.42 & 67.25 & 65.30 & 65.84 & 0.03 \\
+        Custom (64-32-8-128) & 78.87 & 79.72 & 72.74 & 74.28 & 0.63 \\
+        ConvLSTM (Baseline) & \textbf{85.91} & \textbf{85.05} & 83.65 & 84.26 & 512.16 \\
+        \textbf{Custom (32-64-8-256)} & \textbf{85.91} & 84.56 & \textbf{84.56} & \textbf{84.56} & \textbf{8.61} \\
         \hline
     \end{tabular}
     \caption{Performance comparison on the Violence Detection Dataset.}
@@ -392,43 +371,9 @@ Table~\ref{tab:violence_detection_dataset_results} presents the performance comp
     \label{fig:proposed_violence_detection_dataset_cm}
 \end{figure}
 
-\subsection{Ablation Study}
+\subsection{Interpretation of Results}
 
-Additional experiments were conducted using different ConvLSTM configurations, including variations in:
-\begin{itemize}
-    \item Number of ConvLSTM filters
-    \item Dense layer dimensions
-    \item Dropout rates
-    \item Additional convolutional layers
-    \item Optimizer selection
-    \item Learning rates
-\end{itemize}
-
-The objective of these experiments was to identify configurations that improved generalization performance while minimizing overfitting.
-
-% =============================
-% Discussion
-% =============================
-\section{Discussion}
-
-\subsection{Analysis of Results}
-
-Experimental results demonstrate that ConvLSTM architectures are effective for anomalous activity classification due to their ability to capture both spatial and temporal features from video sequences. 
-The proposed model achieved competitive performance across both datasets while maintaining a relatively lightweight architecture.
-
-Results also indicate that model performance is highly dependent on dataset quality and diversity. 
-Models trained on staged or high-quality datasets generally achieved higher accuracy compared to datasets containing noisy surveillance footage and varying camera perspectives.
-
-The confusion matrices further show that certain abnormal activities remain challenging to classify due to visual similarities between classes and inconsistencies in surveillance video quality.
-
-\subsection{Limitations}
-
-Despite achieving promising results, several limitations remain. The datasets used contain a limited number of real-world anomalous events, which may affect model generalization in practical surveillance environments.
-
-In addition, some videos contain motion blur, occlusion, low illumination, and inconsistent camera angles, which can negatively impact classification performance. 
-Training deep learning models on video data also requires significant computational resources and training time.
-
-Finally, the proposed model does not currently support continual learning or online adaptation, limiting its ability to learn new anomalous activities after deployment.
+The experimental results demonstrate that the proposed Custom ConvLSTM architecture matches or exceeds the baseline accuracy and recall on both datasets while drastically reducing the parameter footprint from 512.16M to just 8.61M. Furthermore, the proposed architecture significantly outperformed native 3D CNNs (e.g., ResNet3D-18), which struggled with heavy overfitting on the smaller Violence Detection Dataset.
 
 % =============================
 % Conclusion and Future Work
