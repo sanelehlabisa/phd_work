@@ -65,13 +65,12 @@ monitoring large volumes of surveillance footage manually is labor-intensive,
 time-consuming, and highly prone to human error, particularly in crowded and
 dynamic environments \cite{arshad2022, mohan2019}. As a result, automated Human
 Activity Recognition (HAR) and anomaly detection systems have become an
-important research area in computer vision and deep learning.
+important research area in computer vision and Deep Learning (DL).
 
-Recent advancements in artificial intelligence (AI), machine learning, and deep
-learning have significantly improved the ability of systems to analyze video
+Recent advancements in DL have significantly improved the ability of systems to analyze video
 data and identify suspicious activities automatically \cite{ozyer2021,
 	khan2022}. Deep learning architectures such as Convolutional Neural Networks
-(CNNs), 3D CNNs, recurrent neural networks, and ConvLSTM models have
+(CNNs), 3D CNNs, Long Short Term Memory (LSTM), ConvLSTM, and Transformer models have
 demonstrated strong performance in learning spatial and temporal patterns from
 video sequences \cite{vrskova2022, challa2021}. These models enable
 surveillance systems to recognize complex abnormal activities such as fighting,
@@ -89,7 +88,7 @@ These challenges highlight the need for robust deep learning methods capable of
 accurately classifying anomalous activities across diverse real-world
 conditions.
 
-\subsection{Motivation}
+\subsection{Problem Statement}
 
 Traditional surveillance systems rely heavily on human operators to monitor
 video streams continuously. However, prolonged monitoring often results in
@@ -120,26 +119,15 @@ activities in surveillance videos using spatio-temporal learning techniques.
 
 \subsection{Contributions}
 
-This study proposes a deep learning method for classifying anomalous activities
-in surveillance videos using spatio-temporal feature learning. The main
-contributions of this research are summarized as follows:
+The main contributions of this research are summarized as follows:
 
-\begin{enumerate}
-	\item Development of a ConvLSTM-based deep learning framework for abnormal human
-	      activity classification in surveillance videos.
-
-	\item Implementation of a preprocessing pipeline for handling noisy surveillance
-	      footage and variable-length video sequences.
-
-	\item Investigation of temporal frame sampling techniques to efficiently process
-	      surveillance videos while preserving important motion information.
-
-	\item Evaluation of the proposed approach on publicly available anomaly detection
-	      datasets containing multiple abnormal activity classes.
-
-	\item Analysis of the effectiveness of deep learning techniques for improving anomaly
-	      classification accuracy in real-world surveillance environments.
-\end{enumerate}
+\begin{itemize}
+    \item \textbf{Empirical Architecture Optimization:} We systematically reduced the parameter count of a baseline ConvLSTM architecture to establish a minimum viable capacity. The resulting Custom (64-32-16-64) configuration achieves a $3.8 \times$ size reduction while simultaneously improving accuracy, precision, recall, and F1-score.
+    
+    \item \textbf{Robust Regularization Strategy:} We implemented a highly optimized training protocol combining single-choice spatial augmentations, weight decay, and learning rate scheduling. This strategy successfully eliminates the severe overfitting typically observed when training on small, domain-specific surveillance datasets.
+    
+    \item \textbf{Superior Cross-Domain Generalization:} Through extensive grid-search evaluation, we demonstrated that our lightweight ConvLSTM significantly outperforms computationally heavy 3D architectures (e.g., ResNet3D-18, ResNet-R2Plus1D-18) in both accuracy and false-positive resistance when applying full-network fine-tuning across different datasets.
+\end{itemize}
 
 % =============================
 % Related Work
@@ -156,7 +144,7 @@ Principal Component Analysis Networks (PCANet), and shallow Convolutional
 Neural Networks (CNNs) \cite{mohan2019}. Although these approaches reduced the
 need for continuous manual surveillance, they often struggled to generalize
 across different environments due to their dependence on carefully designed
-features.
+features \cite{anomalyh2652022}.
 
 Mohan et al. \cite{mohan2019} proposed an anomaly detection framework based on
 PCANet, CNN, and SVM classifiers for surveillance video analysis. Their model
@@ -164,6 +152,8 @@ achieved an accuracy of 88\% and an F1-score of 85\%. However, the approach
 suffered from overfitting and inconsistent performance across different
 datasets. Furthermore, the system did not incorporate temporal information from
 previous frames, limiting its effectiveness in dynamic scenes.
+
+TODO: **********************
 
 Similarly, Rehman et al. \cite{rehman2022} introduced an
 Internet-of-Things-based suspicious activity recognition framework using
@@ -435,11 +425,11 @@ precision, recall, F1-score, and validation loss.
 
 This section discusses the experimental setup, model evaluation, and comparative analysis across two standard abnormal human activity recognition benchmarks. All experiments were conducted on a Google Colab virtual machine equipped with a 12-core x86\_64 CPU, 167~GB RAM, and an NVIDIA A100 Tensor Core GPU (40~GB VRAM, CUDA 13.0, driver 580.82.07). The implementation used PyTorch 2.x with the torchvision library for video I/O and the torchmetrics library for evaluation.
 
-The \textbf{Abnormal Activities Dataset (AAD)}~\cite{vrskova2022convlstm} contains 1,069 surveillance videos across 11 activity classes: Begging, Drunkenness, Fight, Harassment, Hijack, Knife Hazard, Normal Videos, Pollution, Property Damage, Robbery, and Terrorism. The \textbf{AIRTLab Violence Detection Dataset (VDD)}~\cite{airlab2020} contains 350 short clips across two classes: Violent and Non-Violent. Both datasets are publicly available benchmarks for abnormal human activity recognition; no custom datasets were created. Videos were preprocessed by re-encoding to H.264 to remove corrupted frames, then uniformly sampled to 16 frames per clip at 16~FPS and resized to $32 \times 32$ pixels, yielding a fixed input tensor of shape $16 \times 3 \times 32 \times 32$. This aggressive spatial downsampling acts as an implicit regularizer and reduces memory footprint, enabling larger batch sizes and faster iteration cycles without sacrificing the macro-level motion patterns relevant to surveillance anomaly detection.
+The \textbf{Abnormal Activities Dataset (AAD)}~\cite{vrskova2022convlstm} contains 1,069 surveillance videos across 11 activity classes: Begging, Drunkenness, Fight, Harassment, Hijack, Knife Hazard, Normal Videos, Pollution, Property Damage, Robbery, and Terrorism. The \textbf{AIRTLab Violence Detection Dataset (VDD)}~\cite{sernani2021} contains 350 short clips across two classes: Violent and Non-Violent. Both datasets are publicly available benchmarks for abnormal human activity recognition. Videos were preprocessed by re-encoding to H.264 to remove corrupted frames, then uniformly sampled to 16 frames per clip at 16~FPS and resized to $32 \times 32$ pixels, yielding a fixed input tensor of shape $16 \times 3 \times 32 \times 32$. This aggressive spatial downsampling acts as an implicit regularizer and reduces memory footprint, enabling larger batch sizes and faster iteration cycles without sacrificing the macro-level motion patterns relevant to surveillance anomaly detection.
 
-Both datasets were split 80:10:10 for training, validation, and testing. An aggressive spatial augmentation pipeline was applied consistently across all frames within each clip to preserve temporal coherence, including random horizontal flips, affine transformations, perspective distortion, colour jitter, Gaussian blur, and random region erasure. Models were optimized using Adam with weight decay $1 \times 10^{-4}$ and a \texttt{ReduceLROnPlateau} scheduler (factor 0.5, patience 5). Label smoothing of 0.1 was applied to the cross-entropy loss. Each model was trained for 128 epochs with a batch size of 32. Training one model configuration took approximately 1.5 hours on the A100.
+Both datasets were split 80:10:10 for training, validation, and testing. An aggressive spatial augmentation pipeline was applied consistently across all frames within each clip to preserve temporal coherence, including random horizontal flips, affine transformations, perspective distortion, colour jitter, Gaussian blur, and random region erasure. Models were optimized using Adam with weight decay $1 \times 10^{-4}$ and a \texttt{ReduceLROnPlateau} scheduler (factor 0.9, patience 5). Each model was trained for 128 epochs with a batch size of 32 and training one model configuration took approximately 1.5 hours.
 
-Performance is reported using Accuracy, Macro Precision, Macro Recall, and Macro F1-Score as defined in Equations~(1)--(4), alongside total trainable parameter count (Equation~(5)). Macro-averaged metrics are reported to expose per-class imbalances and prevent any single dominant class from inflating aggregate scores, which is essential for fair comparison across the 11-class AAD and binary VDD tasks. Parameter count is included as a proxy for inference speed and deployment feasibility: smaller models run faster on edge hardware and are more amenable to real-time deployment in surveillance infrastructure.
+The model's performance was evaluated using Accuracy, Precision, Recall, and F1-Score, as defined in Equations~\eqref{eq:accuracy}--\eqref{eq:f1}, together with confusion matrices for detailed class-level analysis. These metrics were selected to provide a comprehensive assessment of classification performance, particularly in the presence of class imbalance, where overall accuracy alone may not accurately reflect model behaviour. The confusion matrix further highlights class-specific strengths and misclassifications across both the 11-class AAD and binary VDD datasets. In addition, the total parameter count in Equation~\eqref{eq:param_count} was reported as an indicator of computational efficiency and deployment feasibility, since smaller models generally require less memory, offer faster inference, and are more suitable for real-time surveillance applications.
 
 We evaluated three families of video classification architectures: (1) standard 3D convolutional networks (ResNet3D-18, ResNet-MC3-18, ResNet-R2Plus1D-18~\cite{resnet3d,r2plus1d}), (2) ConvLSTM variants derived from the original baseline~\cite{vrskova2022convlstm}, and (3) a lightweight ablation. Initial experiments confirmed that 3D ResNets despite their strong performance on large-scale action recognition benchmarks exhibited significant overfitting on the smaller VDD dataset, with validation accuracy stagnating well below training accuracy. Following promising results with the ConvLSTM family on AAD, an empirical architecture search was conducted by progressively reducing filter sizes from the original baseline until validation loss saturated, establishing the minimum viable capacity. From this boundary, filter configurations across \texttt{[td\_conv, convlstm, conv\_post, fc1]} were varied systematically. Models were first trained from scratch on AAD, then all layers were fully fine-tuned on VDD at a reduced learning rate, allowing the spatiotemporal filters to adapt to the new visual domain rather than relying on frozen feature extractors.
 
@@ -447,26 +437,30 @@ Model performance was evaluated using standard multi-class classification metric
 
 \begin{equation}
     Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
+    \label{eq:accuracy}
 \end{equation}
 
 \begin{equation}
     Precision = \frac{TP}{TP + FP}
+    \label{eq:precision}
 \end{equation}
 
 \begin{equation}
     Recall = \frac{TP}{TP + FN}
+    \label{eq:recall}
 \end{equation}
 
 \begin{equation}
     F1\text{-}Score = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+    \label{eq:f1}
 \end{equation}
 
 The computational efficiency was measured by the total trainable parameter count across all $L$ layers:
 
 \begin{equation}
     Params = \sum_{l=1}^{L} (\text{weights}_l + \text{biases}_l)
+    \label{eq:param_count}
 \end{equation}
-
 To address the tendency of heavy networks to overfit on small datasets, an empirical sensitivity analysis was conducted. We began with the original ConvLSTM~\cite{vrskova2022convlstm} architecture and systematically reduced its parameter count by decreasing the number of filters until the validation loss curve ceased overfitting and reached a stable saturation point. This established a minimum viable baseline capacity. From this baseline, we evaluated various custom filter configurations across the Convolutional and Linear layers, while keeping the LSTM temporal window constant. Ultimately, the \textbf{Custom (64-32-16-64)} configuration emerged as the optimal architecture, providing sufficient representational capacity to track complex motion dynamics without memorizing the training data.
 
 Tables~\ref{tab:aad_results} and~\ref{tab:vdd_results} present the comparative performance of the evaluated architectures, including the proposed Custom ConvLSTM configurations, the original baseline, a lightweight ablation, and standard PyTorch 3D CNNs.
