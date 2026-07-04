@@ -32,21 +32,40 @@
   		- Abnormal activities are rare hence harder to detect
   		- Existing models realy on feacture engineering, hence cannot generilize
   		- Some models only classify video as normla or anomaly which isn't specific
-  		- 
+  		- Anomalous behavior is difﬁcult to deﬁne accurately
+  		- In real-world anomaly activities often occur in a short portion of a video, which makes i harder to detect.
+  		- Existinf datasets like UMN contioans statged videos which slightly deviated from real world videos, his can reult in miss calssifaction in production.
+  		- Datasets like UCSD, Ped1, Ped2, Avenue contains videos from same locaion, which hinders model ability to generilize.
+  		- Existing datasetss are staged and some anomaly videos are not realistic.
   	}
   	Proposed Method {
   		- Used weakly labeled training videos dataset i.e. the training labels (anomalous or normal) are at video-level instead of clip-level.
-  		- Also proposed a new dataset of 1900 videos with total duration 128 hours, and 13 classes, availble at http://crcv.ucf.edu/projects/real-world/
+  		- Also proposed a new dataset of 1900 videos with total duration 128 hours, and 13 classes, availble at http://crcv.ucf.edu/projects/real-world/. Here are the classes (Abuse, Arrest, Arson, Assault, Accident, Burglary, Explosion, Fighting, Robbery, Shooting, Stealing, Shoplifting, and Vandalism.). Most dataset videos are less that 2 minutes. while logest had  more that 10 minutes.
+  		- The proposed dataset videos were taken from YouTube, LiveLeak and unedited, not prank, and only CCTV vodeos. Also removed videos with unclear anomalies
   		- Used Multiple Instance Learning (MIL) framework by treating normal and anomalous surveillance videos as bags and short segments/clips of each video as instances in a bag.
+  		- Used MIL ranking loss.
+  		- Video (BATCH, FRAMES, CHANNELS, WIDTH, HEIGHT) -> Prerained 3D ConvNet -> Flatten -> Linear -> Anomaly Score (BATCH, 1), where each video is 240 × 320 pixels, with 16 frames @ 30fps.
+		- The input of the model is a vido, and model is based on Pretrained ConvNet and output is a singular value (Anomaly Score) e.g if video has anomaly would have a score closer to 1, while normal has Anomaly score close to 0.
   	}
   	Experimental Results {
-  		
+  		- Used their new dataset of 1900 videos and 13 anomaly classes, and videos from CCTV from all over the world thanks to YouTuve, and LiveLeak ensuring diversity
+  		- Used 85:15 rain test split and each video is of this shape 240 × 320 pixels, 16 frames sampled at 30 fps.
+  		- Model trained for over 8k epochs
+  		- The metrics used for model evaluation is Receiver Operating Charecter (ROC), and Area Under Curve (AUC), and False Alarm Rate (FAR).
+  		- The propose mdoel acheived 75.41\% AUC and FAR 1.9.
+  		- To classify video as anoly its output anomaly score should exceed 0.5
   	}
   	Strengths {
+  		- Avoid labor-intensive temporal annotations of anomalous segments in training videos by using sing deep MIL framework with weakly labeled data.
   		- No need for clip level labeled videos
+  		- Proposed dataset contains mostly CCTV videos from real-world from allover the world with the help of YouTube and LiveLeak. And videos were annotated by different people to reduce nmislabeling and unclear label videos were removed.
+  		Used false alaem rate as evation method as in real world anolay activites are rare to full ensure model doesn't raise dfalse almsr in thge real world.
   	}
   	Weaknesses {
   		- The model can only tell that a video contains anomaly somewhere, but we do not know where.
+  		- In MIL, precise temporal locations of anomalous events in videos are unknown.
+  		- The ranking loss in the hinge-loss formulation ignores the underlying temporal structure of the anomalous video, while in the real-world anomaly often occurs only for a short time.
+  		- The proposed model often raised fall alrmas for vides with oclussion, e.g inserts blocking camera view
   	}
   }
 }
