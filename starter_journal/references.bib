@@ -1,11 +1,56 @@
+  abstract={
+  	Problem Statement {
+  		
+  	}
+  	Proposed Method {
+  		
+  	}
+  	Experimental Results {
+  		
+  	}
+  	Strengths {
+  		
+  	}
+  	Weaknesses {
+  			
+  	}
+  }
+
+
 @inproceedings{sultani2018,
   author={Sultani, Waqas and Chen, Chen and Shah, Mubarak},
   title={Real-World Anomaly Detection in Surveillance Videos},
   booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   year={2018},
   pages={6479--6488},
-  doi={10.1109/CVPR.2018.00678}
+  doi={10.1109/CVPR.2018.00678},
+  abstract={
+  	Problem Statement {
+  		- Annotating videos is time consuming
+  		- Manual method cannot keep up with increase in cctv usage
+  		- Manual method is slow and error prone
+  		- Abnormal activities are rare hence harder to detect
+  		- Existing models realy on feacture engineering, hence cannot generilize
+  		- Some models only classify video as normla or anomaly which isn't specific
+  		- 
+  	}
+  	Proposed Method {
+  		- Used weakly labeled training videos dataset i.e. the training labels (anomalous or normal) are at video-level instead of clip-level.
+  		- Also proposed a new dataset of 1900 videos with total duration 128 hours, and 13 classes, availble at http://crcv.ucf.edu/projects/real-world/
+  		- Used Multiple Instance Learning (MIL) framework by treating normal and anomalous surveillance videos as bags and short segments/clips of each video as instances in a bag.
+  	}
+  	Experimental Results {
+  		
+  	}
+  	Strengths {
+  		- No need for clip level labeled videos
+  	}
+  	Weaknesses {
+  		- The model can only tell that a video contains anomaly somewhere, but we do not know where.
+  	}
+  }
 }
+
 
 @article{cheng2020,
   author={Cheng, Ming and Cai, Kai and Li, Ming},
