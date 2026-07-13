@@ -124,7 +124,48 @@ architecture can reduce temporal channels of input videos by self-learning, inst
   volume={2022},
   pages={1--14},
   year={2022},
-  doi={10.1155/2022/8383461}
+  doi={10.1155/2022/8383461},
+    abstract={
+  	Problem Statement {
+  		- HAR is one of the milestones of smart city surveillance projects.
+      - There is a large amount of video data to process, manual intervention is not feasible and is error-prone. Also, it is exceedingly challenging to monitor public spaces constantly. Hence, it is necessary to install intelligent video surveillance that can track people’s movements in real time, classify them as routine or exceptional, and provide alerts
+  	  - Hence, it is necessary to install intelligent video surveillance that can track people’s movements in real time, classify them as routine or exceptional, and provide alerts, however cameer is the most common as it can ealy scale while wareble sense don't, also they miss some imprtan information whcih can lead to miss classifaction, also expensiv.
+      - Camera feeds are also subejted to optoical complaxity contrains like lighting, background etc.
+      - The manual method also cause omissions, making the system eﬀective and error-prone.
+      - Even thought CV showed promising results un solving this probelm however it still encountered time complexity issues as these models are big to deal with complex envidoements in big input data which also limit their adoption for realtime applications.
+      - It is impossible to monitor CCTV events manually.
+      - Many researchers have worked on spatial information with temporal sequences for human activity recognition and detection. However, they failed to achieve impressive results in real-time.
+    }
+  	Proposed Method {
+  		- Authors used fine-tuned YOLOv4 for activity detection and 3D CNN for classification, the proposed method also leverage huma object interest with the help of IoU.
+  	  - Computer vision has provided machines with humanlike vision.
+      - It is labour intensive to label datasets for HAR.
+      - CNN learns visual patterns directly from pixels.
+      - The proposed work implemented the YOLOV4 for detecting the diﬀerent activities related to surveillance and for recognizing the activities, 3D CNN is used. Multiple cameras are connected to the centralized system via IoT (Internet of Things) protocols. Ethernet communication creates a local server to access each camera feed through its speciﬁc IP address used in the centralized GPU for prediction
+      - Human activity identiﬁcation uses data from sensors, such as a sequence of RGB camera images, range sensors, or other sensing modalities, to automatically identify and understand human actions
+      - The proposed method first, detected the region of interest using the ﬁne-tuned version of the Yolo-v4, then, a sequence of 16 frames is generated and ROI is passed through a sequence of frames into the 3D-CNN for classiﬁcation.
+      - The paper presents a hybrid model which ﬁrst detects the area of interest using the YOLO-v4 architecture where an anomaly or unusual activity is happening and then passes it to the 3D-CNN architecture for activity recognition based on the temporal information
+    }
+  	Experimental Results {
+  		- The used dataset comprised of UCF-Crime for activity recognition and MS-COCO for suspicius object detection with the help of IoU
+  	  - Internet of Things-based architecture has been utilized to incorporate and manage the decision- making of deep learning-based architectures eﬃciently.
+      - The proposed method takes 16 frames inpu for YOLOv4 for ROI then pass that into 3DCNN for clasifaction
+      - The proposed models were tested on benchmark datasets like UCF-Crime for activity recognition and COCO dataset for suspicious object detection, and used 80:20 train test split ratio.
+      - The proposed modified YOLOv4 acheived 94.21% validation accuracy, while the combined ovarl model acjeved 93.2% acc, 91.01% precision, and 90.1% recall.
+      - metrics used for evaluation were accuracy, precision, and recall for overall model, and IoU for suspicious object detection.
+      - The experiments performed on benchmark datasets and the 94.21% accuracy for overall model
+    }
+  	Strengths {
+  		- Used moltiple models e.g. YOLOv4 for suspicus object detecction and 3D CNN for abnormal activity classifacation.
+      - Proposed models were even used in the real world at the University premeses
+      - The proposed method was deployed with anIoT-based architecture for real-time processing and eﬃcient decision- making.
+  	}
+  	Weaknesses {
+  			- If the detection model fails to detect object of interest, the classification model will also fail, so the classifaction mdoel is fully dependent on the detection model, hence the solution has single point of failure.
+        - A tradeoﬀ is to proceed with object detection in real time on embedded devices with better accuracy.
+        - At the end the overcall model performed slightly poorly on the ﬁghting and vandalism activities
+  	}
+  }
 }
 
 @inproceedings{mohan2019,
