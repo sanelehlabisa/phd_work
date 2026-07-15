@@ -528,6 +528,51 @@ architecture can reduce temporal channels of input videos by self-learning, inst
   number = {1},
   pages = {8484-8505},
   keywords = {Human activity recognition;Accuracy;Videos;Training;Robustness;Deep learning;Image classification;Computational modeling;Neurons;Computer architecture;ExpAbsTanH;activation function;deep learning;image classification;human activity recognition},
-  doi = {10.1109/ACCESS.2026.3653891}
+  doi = {10.1109/ACCESS.2026.3653891},
+  abstract={
+  	Problem Statement {
+  		- Existing activation functions often suffer from critical limitations such as vanishing or exploding
+      gradients, non-differentiability at zero, and instability during training
+      - these functions do not inherently
+      increase activation sparsity, which may reduce computational
+      efficiency and influence the model’s ability to exploit sparse
+      hierarchical feature representations
+  	}
+  	Proposed Method {
+  		- The paper proposed a novel activation function, ExpAbsTanH, which integrates self-gating with exponen-
+      tial control and smooth nonlinearity.
+      - ExpAbsTanH, a new differen-
+      tiable, self-adaptive, and non-monotonic activation function
+      designed to improve gradient flow, prevent neuron inac-
+      tivation, and stabilize the training process of deep neural
+      networks
+  	}
+  	Experimental Results {
+  		- On MNIST, it achieved high accuracy and stability
+      under increased depth and noise. On CIFAR-10, it was
+      comparable to Mish and outperformed ReLU and Swish,
+      particularly on deeper ResNet architectures.
+      - When integrated with a hybrid ResNet-50, LSTM, and
+      attention model, ExpAbsTanH achieved high accuracy,
+      strong generalization, and noise robustness in human
+      activity recognition tasks on UCF-50 and UCF-101.
+      In UCF-50, it significantly outperformed ReLU in
+      spatiotemporal discrimination.
+      - Expermental results showed that the ExpAbsTanH activation
+      actiation function imporve acc on proposed integrated 
+      ResNet-50, an LSTM module, and a spatial attention mechanism.
+      , 94.85 accuracy, an F1-score of  94.60%97.91 precision, %91.76 
+      recall, on UCF-50 dataset
+  	}
+  	Strengths {
+  		- ExpAbsTanH was found to outperform ReLU and Swish in most cases
+  	}
+  	Weaknesses {
+  			
+  	}
+    Key Takeways {
+      Activation functions play a crucial role in deep learning models, and the proposed ExpAbsTanH function addresses several limitations of existing functions, leading to improved performance in human activity recognition tasks.
+    }
+  }
 }
 
