@@ -142,16 +142,15 @@ learning algorithms. These methods commonly utilized feature engineering
 techniques combined with classifiers such as Support Vector Machines (SVMs),
 Principal Component Analysis Networks (PCANet), and shallow Convolutional
 Neural Networks (CNNs) \cite{mohan2019}. Although these approaches reduced the
-need for continuous manual surveillance, they often struggled to generalize
+need for continuous manual monitoring of surveillance, they often struggled to generalize
 across different environments due to their dependence on carefully designed
-features \cite{anomalyh2652022}.
+features \cite{abbas2022}.
 
 Mohan et al. \cite{mohan2019} proposed an anomaly detection framework based on
 PCANet, CNN, and SVM classifiers for surveillance video analysis. Their model
 achieved an accuracy of 88\% and an F1-score of 85\%. However, the approach
 suffered from overfitting and inconsistent performance across different
-datasets. Furthermore, the system did not incorporate temporal information from
-previous frames, limiting its effectiveness in dynamic scenes.
+datasets.
 
 TODO: **********************
 
@@ -163,7 +162,7 @@ technologies with AI-based monitoring, it remained dependent on feature
 engineering and predefined activity patterns, reducing adaptability in
 real-world environments.
 
-Another traditional-inspired approach was presented in \cite{anomalyh2652022},
+Another traditional-inspired approach was presented in \cite{abbas2022},
 where High Efficiency Video Coding (HEVC) was used for downsampling
 surveillance footage before extracting features with a pre-trained ResNet50
 model and classifying activities using a Bi-LSTM network. The system achieved
@@ -314,8 +313,8 @@ ConvLSTM-based architecture.
 
 \subsection{Model Architecture}
 
-Based on findings from previous studies \cite{vrskova2022convlstm,
-	sernani2021violence, khan2022hybrid}, a ConvLSTM architecture was selected due
+Based on findings from previous studies \cite{vrskova2022,
+	sernani2021, khan2022}, a ConvLSTM architecture was selected due
 to its ability to capture spatial and temporal dependencies simultaneously.
 Conventional CNN models are effective for extracting spatial features, while
 recurrent structures such as LSTMs are suitable for temporal sequence modeling.
@@ -393,7 +392,7 @@ Several model configurations were experimentally evaluated, including different
 ConvLSTM filter sizes, dense layer dimensions, dropout rates, optimizers, and
 learning rates. This experimental approach was motivated by findings in the
 literature that model performance is highly dependent on architectural design
-and dataset characteristics \cite{arshad2022review, chen2021deep}. The final
+and dataset characteristics \cite{arshad2022, chen2021}. The final
 configuration was selected based on validation accuracy and generalization
 performance.
 
@@ -425,13 +424,13 @@ precision, recall, F1-score, and validation loss.
 
 This section discusses the experimental setup, model evaluation, and comparative analysis across two standard abnormal human activity recognition benchmarks. All experiments were conducted on a Google Colab virtual machine equipped with a 12-core x86\_64 CPU, 167~GB RAM, and an NVIDIA A100 Tensor Core GPU (40~GB VRAM, CUDA 13.0, driver 580.82.07). The implementation used PyTorch 2.x with the torchvision library for video I/O and the torchmetrics library for evaluation.
 
-The \textbf{Abnormal Activities Dataset (AAD)}~\cite{vrskova2022convlstm} contains 1,069 surveillance videos across 11 activity classes: Begging, Drunkenness, Fight, Harassment, Hijack, Knife Hazard, Normal Videos, Pollution, Property Damage, Robbery, and Terrorism. The \textbf{AIRTLab Violence Detection Dataset (VDD)}~\cite{sernani2021} contains 350 short clips across two classes: Violent and Non-Violent. Both datasets are publicly available benchmarks for abnormal human activity recognition. Videos were preprocessed by re-encoding to H.264 to remove corrupted frames, then uniformly sampled to 16 frames per clip at 16~FPS and resized to $32 \times 32$ pixels, yielding a fixed input tensor of shape $16 \times 3 \times 32 \times 32$. This aggressive spatial downsampling acts as an implicit regularizer and reduces memory footprint, enabling larger batch sizes and faster iteration cycles without sacrificing the macro-level motion patterns relevant to surveillance anomaly detection.
+The \textbf{Abnormal Activities Dataset (AAD)}~\cite{vrskova2022} contains 1,069 surveillance videos across 11 activity classes: Begging, Drunkenness, Fight, Harassment, Hijack, Knife Hazard, Normal Videos, Pollution, Property Damage, Robbery, and Terrorism. The \textbf{AIRTLab Violence Detection Dataset (VDD)}~\cite{sernani2021} contains 350 short clips across two classes: Violent and Non-Violent. Both datasets are publicly available benchmarks for abnormal human activity recognition. Videos were preprocessed by re-encoding to H.264 to remove corrupted frames, then uniformly sampled to 16 frames per clip at 16~FPS and resized to $32 \times 32$ pixels, yielding a fixed input tensor of shape $16 \times 3 \times 32 \times 32$. This aggressive spatial downsampling acts as an implicit regularizer and reduces memory footprint, enabling larger batch sizes and faster iteration cycles without sacrificing the macro-level motion patterns relevant to surveillance anomaly detection.
 
 Both datasets were split 80:10:10 for training, validation, and testing. An aggressive spatial augmentation pipeline was applied consistently across all frames within each clip to preserve temporal coherence, including random horizontal flips, affine transformations, perspective distortion, colour jitter, Gaussian blur, and random region erasure. Models were optimized using Adam with weight decay $1 \times 10^{-4}$ and a \texttt{ReduceLROnPlateau} scheduler (factor 0.9, patience 5). Each model was trained for 128 epochs with a batch size of 32 and training one model configuration took approximately 1.5 hours.
 
 The model's performance was evaluated using Accuracy, Precision, Recall, and F1-Score, as defined in Equations~\eqref{eq:accuracy}--\eqref{eq:f1}, together with confusion matrices for detailed class-level analysis. These metrics were selected to provide a comprehensive assessment of classification performance, particularly in the presence of class imbalance, where overall accuracy alone may not accurately reflect model behaviour. The confusion matrix further highlights class-specific strengths and misclassifications across both the 11-class AAD and binary VDD datasets. In addition, the total parameter count in Equation~\eqref{eq:param_count} was reported as an indicator of computational efficiency and deployment feasibility, since smaller models generally require less memory, offer faster inference, and are more suitable for real-time surveillance applications.
 
-We evaluated three families of video classification architectures: (1) standard 3D convolutional networks (ResNet3D-18, ResNet-MC3-18, ResNet-R2Plus1D-18~\cite{resnet3d,r2plus1d}), (2) ConvLSTM variants derived from the original baseline~\cite{vrskova2022convlstm}, and (3) a lightweight ablation. Initial experiments confirmed that 3D ResNets despite their strong performance on large-scale action recognition benchmarks exhibited significant overfitting on the smaller VDD dataset, with validation accuracy stagnating well below training accuracy. Following promising results with the ConvLSTM family on AAD, an empirical architecture search was conducted by progressively reducing filter sizes from the original baseline until validation loss saturated, establishing the minimum viable capacity. From this boundary, filter configurations across \texttt{[td\_conv, convlstm, conv\_post, fc1]} were varied systematically. Models were first trained from scratch on AAD, then all layers were fully fine-tuned on VDD at a reduced learning rate, allowing the spatiotemporal filters to adapt to the new visual domain rather than relying on frozen feature extractors.
+We evaluated three families of video classification architectures: (1) standard 3D convolutional networks (ResNet3D-18, ResNet-MC3-18, ResNet-R2Plus1D-18~\cite{resnet3d,r2plus1d}), (2) ConvLSTM variants derived from the original baseline~\cite{vrskova2022}, and (3) a lightweight ablation. Initial experiments confirmed that 3D ResNets despite their strong performance on large-scale action recognition benchmarks exhibited significant overfitting on the smaller VDD dataset, with validation accuracy stagnating well below training accuracy. Following promising results with the ConvLSTM family on AAD, an empirical architecture search was conducted by progressively reducing filter sizes from the original baseline until validation loss saturated, establishing the minimum viable capacity. From this boundary, filter configurations across \texttt{[td\_conv, convlstm, conv\_post, fc1]} were varied systematically. Models were first trained from scratch on AAD, then all layers were fully fine-tuned on VDD at a reduced learning rate, allowing the spatiotemporal filters to adapt to the new visual domain rather than relying on frozen feature extractors.
 
 Model performance was evaluated using standard multi-class classification metrics. Let $TP$, $TN$, $FP$, and $FN$ represent True Positives, True Negatives, False Positives, and False Negatives, respectively. The metrics are defined as follows:
 
@@ -461,7 +460,7 @@ The computational efficiency was measured by the total trainable parameter count
     Params = \sum_{l=1}^{L} (\text{weights}_l + \text{biases}_l)
     \label{eq:param_count}
 \end{equation}
-To address the tendency of heavy networks to overfit on small datasets, an empirical sensitivity analysis was conducted. We began with the original ConvLSTM~\cite{vrskova2022convlstm} architecture and systematically reduced its parameter count by decreasing the number of filters until the validation loss curve ceased overfitting and reached a stable saturation point. This established a minimum viable baseline capacity. From this baseline, we evaluated various custom filter configurations across the Convolutional and Linear layers, while keeping the LSTM temporal window constant. Ultimately, the \textbf{Custom (64-32-16-64)} configuration emerged as the optimal architecture, providing sufficient representational capacity to track complex motion dynamics without memorizing the training data.
+To address the tendency of heavy networks to overfit on small datasets, an empirical sensitivity analysis was conducted. We began with the original ConvLSTM~\cite{vrskova2022} architecture and systematically reduced its parameter count by decreasing the number of filters until the validation loss curve ceased overfitting and reached a stable saturation point. This established a minimum viable baseline capacity. From this baseline, we evaluated various custom filter configurations across the Convolutional and Linear layers, while keeping the LSTM temporal window constant. Ultimately, the \textbf{Custom (64-32-16-64)} configuration emerged as the optimal architecture, providing sufficient representational capacity to track complex motion dynamics without memorizing the training data.
 
 Tables~\ref{tab:aad_results} and~\ref{tab:vdd_results} present the comparative performance of the evaluated architectures, including the proposed Custom ConvLSTM configurations, the original baseline, a lightweight ablation, and standard PyTorch 3D CNNs.
 
@@ -487,7 +486,7 @@ Tables~\ref{tab:aad_results} and~\ref{tab:vdd_results} present the comparative p
 			\textbf{Custom (64-32-16-64)}  & \textbf{96.74} & \textbf{96.34} & \textbf{97.17} & \textbf{96.65} & 1.16 \\
 			Custom (64-32-16-128)          & 94.88 & 95.42 & 95.53 & 95.18 & 2.21 \\
 			\midrule
-			ConvLSTM (Baseline)~\cite{vrskova2022convlstm} & 94.88 & 95.31 & 95.34 & 95.06 & 4.39 \\
+			ConvLSTM (Baseline)~\cite{vrskova2022} & 94.88 & 95.31 & 95.34 & 95.06 & 4.39 \\
 			Light ConvLSTM                 & 86.98 & 89.37 & 88.77 & 87.70 & \textbf{0.07} \\
 			\midrule
 			ResNet3D-18                    & 89.77 & 89.78 & 91.12 & 90.00 & 33.17 \\
@@ -531,7 +530,7 @@ The confusion matrix in Figure~\ref{fig:cm_aad} confirms balanced per-class disc
 			\textbf{Custom (64-32-16-64)}  & \textbf{88.57} & \textbf{89.33} & \textbf{87.50} & \textbf{88.09} & 1.16 \\
 			Custom (64-32-16-128)          & 78.87 & 77.68 & 80.04 & 78.02 & 2.21 \\
 			\midrule
-			ConvLSTM (Baseline)~\cite{vrskova2022convlstm} & 80.28 & 78.87 & 81.13 & 79.36 & 4.39 \\
+			ConvLSTM (Baseline)~\cite{vrskova2022} & 80.28 & 78.87 & 81.13 & 79.36 & 4.39 \\
 			Light ConvLSTM                 & 80.28 & 78.53 & 80.22 & 79.08 & \textbf{0.07} \\
 			\midrule
 			ResNet3D-18                    & 77.46 & 79.21 & 81.70 & 77.24 & 33.17 \\
