@@ -153,7 +153,7 @@ Input modalities broadly fall into two categories: sensor-based approaches using
 Measurement Units (IMU), accelerometers, or gyroscopes attached to the body
 ~\cite{talukder2024cnn_convlstm_lrcn, frontiers_wearable_cnn2024}, and vision-based 
 approaches using RGB video captured by fixed or mobile cameras~\cite{vrskova2022, 
-sultani2018ucfcrime}. Sensor-based methods offer high temporal resolution and are 
+sultani2018}. Sensor-based methods offer high temporal resolution and are 
 well-suited to personal health monitoring, fall detection, and rehabilitation tracking 
 in controlled environments~\cite{frontiers_wearable_cnn2024}. However, they require 
 subjects to wear instrumented devices, which limits scalability in unconstrained public 
@@ -170,13 +170,13 @@ Several benchmark datasets have shaped the direction of this field. The UCF101
 dataset~\cite{soomro2012ucf101} provided 13,320 web-sourced clips across 101 general 
 action classes and established video classification as a tractable deep learning problem,
 though its classes (archery, knitting, diving) are not surveillance-relevant. The 
-UCF-Crime dataset~\cite{sultani2018ucfcrime}, introduced at CVPR 2018, marked a 
+UCF-Crime dataset~\cite{soomro2012ucf101}, introduced at CVPR 2018, marked a 
 significant shift toward real-world anomaly detection by providing 1,900 untrimmed
 surveillance videos across 13 crime categories including Fighting, Robbery, Shooting,
 and Vandalism, collected from genuine CCTV footage. UCF-Crime remains the primary
 benchmark for abnormal activity recognition due to its scale and realism, though it
 provides only video-level labels rather than temporal annotations, making precise
-localisation challenging~\cite{sultani2018ucfcrime}. The LoDVP Abnormal Activities
+localisation challenging~\cite{soomro2012ucf101}. The LoDVP Abnormal Activities
 Dataset~\cite{vrskova2022} addresses the staged nature of earlier datasets with 1,069
 videos across 11 surveillance-relevant activity classes recorded across varied lighting, 
 backgrounds, and camera angles. The AIRTLab Violence Detection Dataset~\cite{sernani2021}
@@ -252,7 +252,7 @@ pretraining datasets and carry $100M+$ parameters, making real-time deployment i
 effectively but lack the ability to model long-range temporal dependencies across 
 extended clips, and their $11-33M$ parameter count introduces overfitting risk on small
 datasets. Hybrid models combining these families often improve performance marginally but
-inherit the computational cost of their components. The ConvLSTM~\cite{convlstm2015} 
+inherit the computational cost of their components. The ConvLSTM~\cite{xingjian2015convlstm} 
 family is selected as the model of choice because its architectural inductive bias encodes
 spatial structure at each timestep while propagating temporal state through recurrent
 connections naturally suits the sequential nature of surveillance video without requiring
@@ -372,7 +372,7 @@ Both datasets were split 80:10:10 for training, validation, and testing. An aggr
 
 The model's performance was evaluated using Accuracy, Precision, Recall, and F1-Score, as defined in Equations~\eqref{eq:accuracy}--\eqref{eq:f1}, together with confusion matrices for detailed class-level analysis. These metrics were selected to provide a comprehensive assessment of classification performance, particularly in the presence of class imbalance, where overall accuracy alone may not accurately reflect model behaviour. The confusion matrix further highlights class-specific strengths and misclassifications across both the 11-class AAD and binary VDD datasets. In addition, the total parameter count in Equation~\eqref{eq:param_count} was reported as an indicator of computational efficiency and deployment feasibility, since smaller models generally require less memory, offer faster inference, and are more suitable for real-time surveillance applications.
 
-We evaluated three families of video classification architectures: (1) standard 3D convolutional networks (ResNet3D-18, ResNet-MC3-18, ResNet-R2Plus1D-18~\cite{resnet3d,r2plus1d}), (2) ConvLSTM variants derived from the original baseline~\cite{vrskova2022}, and (3) a lightweight ablation. Initial experiments confirmed that 3D ResNets despite their strong performance on large-scale action recognition benchmarks exhibited significant overfitting on the smaller VDD dataset, with validation accuracy stagnating well below training accuracy. Following promising results with the ConvLSTM family on AAD, an empirical architecture search was conducted by progressively reducing filter sizes from the original baseline until validation loss saturated, establishing the minimum viable capacity. From this boundary, filter configurations across \texttt{[td\_conv, convlstm, conv\_post, fc1]} were varied systematically. Models were first trained from scratch on AAD, then all layers were fully fine-tuned on VDD at a reduced learning rate, allowing the spatiotemporal filters to adapt to the new visual domain rather than relying on frozen feature extractors.
+We evaluated three families of video classification architectures: (1) standard 3D convolutional networks (ResNet3D-18, ResNet-MC3-18, ResNet-R2Plus1D-18), (2) ConvLSTM variants derived from the original baseline~\cite{vrskova2022}, and (3) a lightweight ablation. Initial experiments confirmed that 3D ResNets despite their strong performance on large-scale action recognition benchmarks exhibited significant overfitting on the smaller VDD dataset, with validation accuracy stagnating well below training accuracy. Following promising results with the ConvLSTM family on AAD, an empirical architecture search was conducted by progressively reducing filter sizes from the original baseline until validation loss saturated, establishing the minimum viable capacity. From this boundary, filter configurations across \texttt{[td\_conv, convlstm, conv\_post, fc1]} were varied systematically. Models were first trained from scratch on AAD, then all layers were fully fine-tuned on VDD at a reduced learning rate, allowing the spatiotemporal filters to adapt to the new visual domain rather than relying on frozen feature extractors.
 
 Model performance was evaluated using standard multi-class classification metrics. Let $TP$, $TN$, $FP$, and $FN$ represent True Positives, True Negatives, False Positives, and False Negatives, respectively. The metrics are defined as follows:
 
