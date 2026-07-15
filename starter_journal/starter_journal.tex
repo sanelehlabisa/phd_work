@@ -147,159 +147,117 @@ results, and a comparative discussion against state-of-the-art models. Finally, 
 % =============================
 \section{Related Work}
 
-\subsection{Traditional Approaches}
+HAR from video and sensor data has attracted sustained research attention due to its 
+relevance to public safety, healthcare monitoring, and intelligent surveillance systems.
+Input modalities broadly fall into two categories: sensor-based approaches using Inertial
+Measurement Units (IMU), accelerometers, or gyroscopes attached to the body
+~\cite{talukder2024cnn_convlstm_lrcn, frontiers_wearable_cnn2024}, and vision-based 
+approaches using RGB video captured by fixed or mobile cameras~\cite{vrskova2022, 
+sultani2018ucfcrime}. Sensor-based methods offer high temporal resolution and are 
+well-suited to personal health monitoring, fall detection, and rehabilitation tracking 
+in controlled environments~\cite{frontiers_wearable_cnn2024}. However, they require 
+subjects to wear instrumented devices, which limits scalability in unconstrained public 
+spaces and cannot capture visual contextual cues such as weapon presence or crowd 
+interaction that are essential for anomaly detection in surveillance settings
+~\cite{talukder2024cnn_convlstm_lrcn}. Hybrid approaches combining skeleton joint 
+positions from pose estimation with accelerometer signals have been explored
+~\cite{talukder2024cnn_convlstm_lrcn}, but the added hardware requirement and privacy
+implications of persistent wearable monitoring make camera-based systems the more 
+practical choice for public surveillance applications. This work therefore focuses on 
+vision-based abnormal activity recognition from Red Green Blue (RGB) video.
 
-Early approaches for anomaly detection and Human Activity Recognition (HAR)
-relied heavily on handcrafted feature extraction and traditional machine
-learning algorithms. These methods commonly utilized feature engineering
-techniques combined with classifiers such as Support Vector Machines (SVMs),
-Principal Component Analysis Networks (PCANet), and shallow Convolutional
-Neural Networks (CNNs) \cite{mohan2019}. Although these approaches reduced the
-need for continuous manual monitoring of surveillance, they often struggled to generalize
-across different environments due to their dependence on carefully designed
-features \cite{abbas2022}.
+Several benchmark datasets have shaped the direction of this field. The UCF101 
+dataset~\cite{soomro2012ucf101} provided 13,320 web-sourced clips across 101 general 
+action classes and established video classification as a tractable deep learning problem,
+though its classes (archery, knitting, diving) are not surveillance-relevant. The 
+UCF-Crime dataset~\cite{sultani2018ucfcrime}, introduced at CVPR 2018, marked a 
+significant shift toward real-world anomaly detection by providing 1,900 untrimmed
+surveillance videos across 13 crime categories including Fighting, Robbery, Shooting,
+and Vandalism, collected from genuine CCTV footage. UCF-Crime remains the primary
+benchmark for abnormal activity recognition due to its scale and realism, though it
+provides only video-level labels rather than temporal annotations, making precise
+localisation challenging~\cite{sultani2018ucfcrime}. The LoDVP Abnormal Activities
+Dataset~\cite{vrskova2022} addresses the staged nature of earlier datasets with 1,069
+videos across 11 surveillance-relevant activity classes recorded across varied lighting, 
+backgrounds, and camera angles. The AIRTLab Violence Detection Dataset~\cite{sernani2021}
+contributes a targeted binary benchmark of 350 clips specifically designed to challenge
+false-positive resistance by including fast non-violent actions (hugging, clapping) that
+visually resemble violent behaviour. Together, these datasets cover the progression from
+general action recognition to surveillance-specific fine-grained anomaly detection, and
+both the LoDVP and AIRTLab datasets are used as evaluation benchmarks in this work.
 
-Mohan et al. \cite{mohan2019} proposed an anomaly detection framework based on
-PCANet, CNN, and SVM classifiers for surveillance video analysis. Their model
-achieved an accuracy of 88\% and an F1-score of 85\%. However, the approach
-suffered from overfitting and inconsistent performance across different
-datasets.
+Three primary model families have emerged for video-based activity recognition: 3D CNNs, 
+recurrent architectures with convolutional feature extractors, and transformer-based
+models. Hara et al.~\cite{hara2018resnet3d} demonstrated that 3D ResNet architectures can
+effectively extend the success of 2D image classification to video by applying volumetric
+convolutions across both spatial and temporal dimensions. Tran et al.
+~\cite{tran2018closer} further refined 3D convolution design by introducing factorised 
+variants: ResNet-MC3 uses mixed 2D-3D convolutions to reduce cost, while ResNet-R(2+1)D
+decomposes each 3D convolution into a 2D spatial convolution followed by a 1D temporal
+convolution, improving accuracy on Kinetics while reducing parameters. Despite their
+strong performance on large-scale action recognition benchmarks, 3D CNN architectures
+carry $11-33$ million parameters and were pretrained on Kinetics, which consists of
+general web video rather than surveillance footage. This domain gap, combined with the 
+model capacity far exceeding what small surveillance datasets can support, leads to
+significant overfitting and degraded generalisation on small abnormal activity datasets,
+a limitation confirmed by our experiments.
 
-Similarly, Rehman et al. \cite{rehman2022} introduced an
-Internet-of-Things-based suspicious activity recognition framework using
-multimodal computer vision techniques for smart city security applications.
-While the method demonstrated the effectiveness of integrating surveillance
-technologies with AI-based monitoring, it remained dependent on feature
-engineering and predefined activity patterns, reducing adaptability in
-real-world environments.
+Transformer-based architectures represent the current state of the art on general video
+benchmarks. Bertasius et al.~\cite{bertasius2021timesformer} proposed TimeSformer, which 
+extends the Vision Transformer (ViT) to video by applying factorised space-time
+self-attention over non-overlapping frame patches, achieving strong results on Kinetics
+and Something-Something. Liu et al.~\cite{liu2022videoswin} introduced Video Swin
+Transformer, which improves efficiency through hierarchical shifted window attention in 
+3D, establishing new benchmarks across multiple action recognition datasets. More 
+recently, dual-encoder frameworks combining I3D and TimeSformer through multiple instance
+learning have achieved 90.7\% AUC on UCF-Crime under weak supervision
+~\cite{dual_backbone_2025}. While transformer models offer impressive accuracy, they
+require $28-121$ million parameters and large-scale pretraining datasets to generalise, 
+making them impractical for real-time deployment on resource-constrained surveillance 
+hardware. Their computational complexity scales quadratically with sequence length, 
+further limiting applicability to long, untrimmed surveillance clips.
 
-Another traditional-inspired approach was presented in \cite{abbas2022},
-where High Efficiency Video Coding (HEVC) was used for downsampling
-surveillance footage before extracting features with a pre-trained ResNet50
-model and classifying activities using a Bi-LSTM network. The system achieved
-an AUC score of 90.16\% and an accuracy of 79.81\%. Although the HEVC
-compression reduced computational requirements, it also resulted in the loss of
-important visual details, negatively affecting detection accuracy.
+The ConvLSTM family offers a more balanced alternative by combining convolutional spatial
+feature extraction with recurrent temporal modelling in a single efficient architecture. 
+The foundational ConvLSTM cell, introduced by Shi et al.~\cite{xingjian2015convlstm} for 
+spatiotemporal precipitation nowcasting, replaces the fully connected operations in 
+standard LSTM gates with convolutions, preserving spatial structure through the recurrent
+temporal pass. Vrskova et al.~\cite{vrskova2022} applied this architecture directly to 
+abnormal activity recognition, proposing a sequential model consisting of a 
+TimeDistributed Conv2D layer for per-frame spatial encoding, a ConvLSTM2D layer for 
+temporal integration, batch normalisation, a post-LSTM convolutional refinement layer, 
+and a dense classifier, achieving approximately 96\% accuracy on the LoDVP dataset. The 
+same group subsequently explored hybrid 3DCNN-ConvLSTM combinations
+~\cite{vrskova2023_3dcnn_convlstm}, finding that joint spatial and temporal convolution
+improves discrimination on some benchmarks at the cost of increased complexity. Patil et 
+al.~\cite{residual_attention_convlstm2023} augmented the ConvLSTM cell with residual
+attention modules to focus on spatially localised activity regions, achieving 89\% 
+accuracy on the Hockey Fight binary dataset. The paper~\cite{bidirectional_convlstm2025}
+extended the temporal modelling further with bi-directional ConvLSTM, processing frame
+sequences in both temporal directions to capture contextual dependencies across the full
+clip, improving early activity recognition. Kumar and Biswas~\cite{kumar2024fuzzy}
+incorporated fuzzy logic post-processing to handle visual ambiguity between similar
+activity classes such as Fight and Harassment, demonstrating that soft decision
+boundaries improve classification on datasets with overlapping motion patterns.
 
-Despite their contributions, traditional approaches generally struggle with
-complex spatio-temporal feature learning, noisy surveillance footage, varying
-camera perspectives, and large-scale real-world datasets \cite{arshad2022}.
-These limitations motivated the transition toward more advanced deep
-learning-based approaches.
-
-\subsection{Deep Learning Approaches}
-
-Recent advancements in deep learning have significantly improved the
-performance of anomaly detection and HAR systems by enabling automatic
-extraction of spatial and temporal features from video data \cite{ozyer2021,
-	chen2021}. Deep learning models such as CNNs, Long Short-Term Memory (LSTM)
-networks, 3D CNNs, ConvLSTM architectures, and Graph Convolutional Networks
-(GCNs) have demonstrated promising results in surveillance video analysis.
-
-Sultani et al. \cite{sultani2018} introduced a deep learning framework based on
-Multiple Instance Learning (MIL) for anomaly detection in real-world
-surveillance videos. Their approach leveraged weakly labeled video data and
-introduced a ranking loss function for anomaly localization. The model
-significantly improved anomaly detection performance on the UCF-Crime dataset.
-However, the system still struggled with nighttime scenes, occlusions, and
-low-quality footage.
-
-Cheng et al. \cite{cheng2020} proposed the Flow Gated Network, which combines
-3D CNNs with optical flow information for violence detection in surveillance
-videos. Alongside the model, the authors introduced the RWF-2000 dataset
-containing 2,000 real-world violent and non-violent video clips. Their
-lightweight architecture achieved an accuracy of 87.25\% using only 0.27
-million parameters. Nevertheless, the dataset size remained limited compared to
-the complexity of real-world surveillance environments.
-
-Zaheer et al. \cite{zaheer2021} proposed a Siamese CNN framework for anomaly
-detection using moving surveillance robots. The system compared live video
-frames with reference normal images to classify abnormal behavior and achieved
-an AUC score of 91.35\%. Although the method supported adaptive learning and
-viewpoint changes, it lacked temporal video analysis and required a large
-database of normal reference images.
-
-Challa et al. \cite{challa2021} proposed a multi-branch CNN-BiLSTM architecture
-for HAR using wearable sensor data collected from smartphones. The model
-achieved accuracies of 96.05\%, 96.37\%, and 94.29\% on the WISDM, UCI-HAR, and
-PAMAP2 datasets, respectively. By combining CNNs and BiLSTM networks, the model
-effectively captured both local spatial features and long-term temporal
-dependencies. However, the study focused mainly on motion sensor data and did
-not consider posture-related information from body joints.
-
-Sernani et al. \cite{sernani2021} proposed multiple deep learning-based
-violence detection models using the AIRTLab dataset. Their ConvLSTM model
-outperformed pre-trained CNN architectures such as VGG16, VGG19, and ResNet50,
-achieving 97.15\% accuracy, 97.89\% F1-score, and 99.67\% AUC. Despite these
-strong results, the dataset was collected in controlled environments using
-non-professional actors, leading to overfitting and reduced real-world
-generalization.
-
-Vrskova et al. \cite{vrskova2022} proposed a ConvLSTM-based architecture for
-abnormal human activity recognition in surveillance videos. Their model
-achieved an accuracy of 96.19\%, precision of 96.50\%, recall of 96.85\%, and
-F1-score of 96.42\% on a newly developed abnormal activity dataset. The
-ConvLSTM architecture demonstrated strong spatio-temporal learning capabilities
-and generalized well across multiple datasets. However, the proposed dataset
-primarily consisted of high-quality staged videos, limiting applicability in
-realistic surveillance environments.
-
-Cao et al. \cite{cao2022} introduced a Weakly Supervised Adaptive Graph
-Convolutional Network (WAGCN) for anomaly detection in surveillance videos. The
-method constructed adaptive graphs based on temporal consistency and feature
-similarity between video segments. Their model achieved frame-level AUC scores
-of 84.67\% and 96.05\% on the UCF-Crime and ShanghaiTech datasets,
-respectively. Although graph-based learning improved contextual understanding,
-the weakly supervised framework limited anomaly localization precision.
-
-Khan et al. \cite{khan2022} developed a hybrid CNN-LSTM model for HAR using
-Kinect-based 2D joint data. Their model achieved an accuracy of 90.89\%,
-precision of 91.11\%, and recall of 90.84\%. By utilizing D-RGB cameras, the
-approach improved robustness to illumination changes. However, the system
-assumed fixed activity durations, which may not reflect real-world surveillance
-scenarios.
-
-Overall, recent deep learning approaches have demonstrated strong performance
-in extracting spatio-temporal information and improving anomaly classification
-accuracy. However, challenges related to dataset diversity, overfitting, noisy
-footage, real-world generalization, and computational efficiency remain
-significant research concerns.
-
-\subsection{Summary of Gaps}
-
-The reviewed literature demonstrates that deep learning techniques have
-significantly improved anomaly detection and HAR performance in surveillance
-videos. Models based on CNNs, LSTMs, 3D CNNs, and ConvLSTM architectures
-consistently outperform traditional handcrafted feature-based approaches due to
-their ability to learn spatial and temporal representations automatically
-\cite{vrskova2022, sernani2021, challa2021}. Additionally, publicly available
-datasets such as UCF-Crime \cite{sultani2018}, RWF-2000 \cite{cheng2020},
-AIRTLab \cite{sernani2021}, and DCSASS \cite{hervas2025} have contributed to
-the advancement of anomaly detection research.
-
-Despite these advancements, several limitations remain unresolved. Many
-existing models are trained and evaluated on staged or highly curated datasets
-that do not accurately represent real-world surveillance environments
-\cite{cheng2020, vrskova2022}. Consequently, these systems often struggle with
-noisy footage, occlusions, illumination changes, low-resolution videos, and
-dynamic camera perspectives. Furthermore, many approaches rely on relatively
-small datasets, increasing the risk of overfitting and limiting generalization
-across unseen scenarios \cite{arshad2022}.
-
-Another important limitation is the computational complexity of many deep
-learning models, which restricts real-time deployment in practical surveillance
-systems. Some methods also rely on fixed-length activity sequences or weakly
-supervised labels, reducing flexibility and localization accuracy
-\cite{sultani2018, khan2022}. In addition, several existing systems focus
-primarily on specific anomaly categories such as violence detection while
-failing to generalize across broader abnormal activity classes.
-
-Based on these gaps, there is a need for robust deep learning frameworks
-capable of effectively learning spatio-temporal representations from diverse
-surveillance environments while maintaining strong generalization performance.
-This research therefore investigates a ConvLSTM-based approach for classifying
-anomalous activities in surveillance videos, with emphasis on handling noisy
-data, variable-length sequences, and improving real-world applicability.
+Based on this review, vision-based approaches are preferred over sensor-based methods 
+for public surveillance due to scalability and richer contextual information. The 
+LoDVP~\cite{vrskova2022} and AIRTLab~\cite{sernani2021} datasets are selected 
+as they represent the most accessible and application-relevant benchmarks for 
+surveillance-specific abnormal activity recognition, covering both fine-grained 
+multi-class classification and binary violence detection. Among model families, 
+transformers~\cite{bertasius2021timesformer} achieve strong accuracy but require large 
+pretraining datasets and carry $100M+$ parameters, making real-time deployment impractical.
+3D CNNs~\cite{hara2018resnet3d,tran2018closer} capture local spatiotemporal features
+effectively but lack the ability to model long-range temporal dependencies across 
+extended clips, and their $11-33M$ parameter count introduces overfitting risk on small
+datasets. Hybrid models combining these families often improve performance marginally but
+inherit the computational cost of their components. The ConvLSTM~\cite{convlstm2015} 
+family is selected as the model of choice because its architectural inductive bias encodes
+spatial structure at each timestep while propagating temporal state through recurrent
+connections naturally suits the sequential nature of surveillance video without requiring
+large-scale pretraining. This bias simplifies learning, reduces the data requirement, and
+enables a compact model well-suited to real-time inference.
 
 % =============================
 % Proposed Method
@@ -309,9 +267,8 @@ data, variable-length sequences, and improving real-world applicability.
 \subsection{Problem Formulation}
 
 The objective of this study is to classify anomalous human activities in
-surveillance videos using a deep learning-based Human Activity Recognition
-(HAR) framework. Given a video sequence $V = \{f_1, f_2, ..., f_T\}$ containing
-$T$ frames, the model learns a mapping function:
+surveillance videos using a deep learning-based HAR framework. Given a video sequence
+$V = \{f_1, f_2, ..., f_T\}$ containing $T$ frames, the model learns a mapping function:
 
 \[
 	F(V) \rightarrow y
@@ -324,12 +281,11 @@ ConvLSTM-based architecture.
 
 \subsection{Model Architecture}
 
-Based on findings from previous studies \cite{vrskova2022,
-	sernani2021, khan2022}, a ConvLSTM architecture was selected due
-to its ability to capture spatial and temporal dependencies simultaneously.
-Conventional CNN models are effective for extracting spatial features, while
-recurrent structures such as LSTMs are suitable for temporal sequence modeling.
-ConvLSTM combines both capabilities within a single architecture, making it
+Based on findings from previous studies \cite{vrskova2022, sernani2021, khan2022}, a 
+ConvLSTM architecture was selected due to its ability to capture spatial and temporal 
+dependencies simultaneously. Conventional CNN models are effective for extracting spatial
+features, while recurrent structures such as LSTMs are suitable for temporal sequence
+modeling. ConvLSTM combines both capabilities within a single architecture, making it
 well suited for video-based anomaly classification.
 
 The proposed model processes video clips with dimensions:
@@ -382,6 +338,10 @@ The model architecture is summarized in Algorithm~\ref{alg:model}.
     \end{verbatim}
 \end{algorithm}
 
+The model's recurrent inductive bias reduces the effective hypothesis space relative 
+to transformer and 3D CNN alternatives, making it learnable from the small surveillance 
+datasets used here without large-scale pretraining.
+
 \subsection{Training Procedure}
 
 The model was trained using supervised learning with categorical activity
@@ -398,35 +358,6 @@ predicted probability for class $i$.
 The Adam optimizer was used with weight decay regularization to improve
 convergence and reduce overfitting. Dropout layers were also incorporated
 within the network to improve generalization performance.
-
-Several model configurations were experimentally evaluated, including different
-ConvLSTM filter sizes, dense layer dimensions, dropout rates, optimizers, and
-learning rates. This experimental approach was motivated by findings in the
-literature that model performance is highly dependent on architectural design
-and dataset characteristics \cite{arshad2022, chen2021}. The final
-configuration was selected based on validation accuracy and generalization
-performance.
-
-\subsection{Implementation Details}
-
-Videos were uniformly sampled into fixed-length sequences to ensure consistent
-temporal input across all training samples. Short videos were padded by
-repeating the final frame, while longer videos were uniformly sampled to
-preserve temporal information.
-
-All frames were resized to $64 \times 64$ pixels before training. The dataset
-was divided into training, validation, and testing subsets using a ratio of
-70\%, 15\%, and 15\%, respectively.
-
-Experiments were implemented in Python using PyTorch and Torchvision. Training
-was performed on NVIDIA GPU hardware using mini-batch gradient descent. Data
-loading was implemented using lazy-loading techniques to reduce memory usage
-and improve scalability when processing large surveillance datasets.
-
-To improve robustness and reduce overfitting, additional experiments were
-conducted using data augmentation techniques such as horizontal flipping,
-rotation, and color jittering. Model performance was evaluated using accuracy,
-precision, recall, F1-score, and validation loss.
 
 % =============================
 % Experimental Results and Discussion
@@ -563,6 +494,13 @@ Table~\ref{tab:vdd_results} reports results on the binary VDD following full fin
 
 The confusion matrix in Figure~\ref{fig:cm_vdd} illustrates the model's resistance to false positives on the VDD dataset, which was explicitly constructed to include fast non-violent actions (hugging, clapping) designed to confuse motion-based detectors. The tight balance between predicted Violent and Non-Violent classes confirms that the temporal modelling captures the sustained movement patterns of genuine violence rather than momentary motion bursts.
 
+Inspection of misclassified samples reveals that a proportion of errors occur between 
+visually similar classes such as Fight and Harassment, or Knife Hazard and Fight, where 
+a single clip may contain overlapping behavioural cues from multiple categories. This 
+suggests that the problem may be better framed as multi-label classification in future 
+work, where a clip can simultaneously belong to more than one activity class rather than 
+being forced into a single hard assignment.
+
 Across both datasets, the Custom (64-32-16-64) configuration consistently achieves top performance, confirming it as the proposed model. The key improvement over the original 4.39M parameter baseline is a 3.8$\times$ parameter reduction without accuracy loss, achieved by widening the initial TimeDistributed Conv2D to 64 filters for rich spatial feature extraction, reducing the post-LSTM convolution to 16 filters to compress temporal representations, and restricting the dense head to 64 neurons to prevent memorization. Combined with augmentation, weight decay, and cross-dataset fine-tuning, these design choices address the overfitting challenge that degrades both the original baseline and 3D ResNet architectures on small surveillance datasets.
 
 The aggressive spatial downsampling to $32 \times 32$ pixels limits visual acuity: fine-grained anomalies such as small weapons in crowded frames, or subtle posture-based distinctions, may fall below the resolution threshold. The model additionally provides only clip-level classification and cannot spatially localize anomalies within the frame. Extending the architecture to support temporal grounding and spatial attention maps remains an important direction for future work.
@@ -572,9 +510,27 @@ The aggressive spatial downsampling to $32 \times 32$ pixels limits visual acuit
 % =============================
 \section{Conclusion and Future Work}
 
-This paper presented a lightweight, highly optimized ConvLSTM architecture designed specifically for anomalous activity recognition in low-resource surveillance environments. Through systematic architectural ablation, we demonstrated that expanding the temporal depth while bottlenecking the spatial convolutions yields superior generalization. The optimal Custom (32-64-16-128) model outperformed both its heavier ConvLSTM predecessors and standard 3D ResNets, achieving state-of-the-art efficiency with a 14$\times$ parameter reduction compared to ResNet3D-18. Furthermore, we established that strict data augmentation policies (Random Choice) and weight decay are mandatory to prevent representational collapse when fine-tuning on datasets with fewer than 500 samples.
+This paper presented a lightweight ConvLSTM architecture for abnormal human activity 
+recognition in surveillance video. Following an empirical capacity search from the 
+original 4M parameter baseline~\cite{vrskova2022}, the proposed Custom 
+(64-32-16-64) configuration achieves 96.74\% accuracy on the 11-class LoDVP dataset 
+and 88.57\% on the binary AIRTLab violence detection benchmark, matching or exceeding 
+both the original ConvLSTM baseline and standard 3D CNN architectures at 1.28M 
+parameters a 3.8$\times$ reduction. The combination of spatial augmentation, weight 
+decay, learning rate scheduling, and cross-dataset fine-tuning proved effective in 
+addressing the overfitting challenge posed by small surveillance datasets.
 
-Future work will address the spatial limitations of the current architecture by exploring a hybrid fusion of 3D convolutions and ConvLSTM layers. The goal is to leverage 3D convolutions for robust early feature extraction while relying on LSTMs for long-term temporal sequence modelling, crucially while maintaining a strict parameter budget ($<$5M parameters). Additionally, we will investigate adaptive, curriculum-based spatial transformations to improve robustness against varying camera angles and lighting conditions common in real-world deployment.
+Error analysis revealed that a subset of misclassifications occur between visually 
+similar classes such as Fight and Harassment, suggesting that some surveillance clips 
+inherently contain overlapping behavioural cues from multiple categories. This points 
+toward multi-label classification as a more appropriate formulation, where a clip is 
+not forced into a single hard class assignment. Additionally, the current model operates 
+on fixed-length short clips and does not retain context across clip boundaries,
+incorporating long-term temporal memory through hierarchical recurrence or memory-augmented 
+networks could improve recognition of activities that unfold over extended durations. 
+Future work will explore attention-based temporal localisation, multi-label reformulation, 
+and evaluation on the larger UCF-Crime benchmark to further validate generalisation to 
+real-world surveillance conditions.
 
 % =============================
 % References
