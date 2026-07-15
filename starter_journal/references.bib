@@ -14,6 +14,8 @@
   	Weaknesses {
   			
   	}
+    Key Takeways {
+      }
   }
 
 @misc{schuldt2004,
@@ -433,7 +435,41 @@ architecture can reduce temporal channels of input videos by self-learning, inst
   article-number = {2695},
   url = {https://www.mdpi.com/2076-3417/15/5/2695},
   issn = {2076-3417},
-  doi = {10.3390/app15052695}
+  doi = {10.3390/app15052695},
+  abstract={
+    Problem Statement {
+      - Traditional models has limitations, such as inadequate spatiotemporal information fusion, limited feature diversity, and insufficient accuracy.
+
+    }
+    Proposed Method {
+      - Proposed a two-stream network for HAR based on multiscale attension transformer and 3D convolutional (C3D) fusion, here a multi-scale convolutional Transformer encoder is introduced to extract features.
+      - Leveraging the multi-scale attention mechanism, the model captures and enhances features at various scales, which are then adaptively fused using a weighted strategy to improve feature representation
+      - 3D CNNs cannot handle long-term dependencies.
+      - To fully leverage the advantages of various networks, the paper proposed a
+      two-stream network model for human action recognition based on a multi-scale attention
+      Transformer and 3D convolution (MAT-C3D). By constructing a temporal network based on
+      3D convolution to capture the temporal dependencies between video frames, it can better
+      understand the continuous changes of actions. By constructing a spatial network based
+      on a multi-scale Transformer model, it can capture long-term dependencies and generate
+      receptive fields of different sizes for feature fusion. Moreover, an adaptive weighting
+      mechanism is employed for feature fusion, which enriches the diversity of features and
+      better adapts to long-term, multi-scale action recognition tasks in complex environments
+    }
+    Experimental Results {
+      - Used dataset UCF101, HMDB51, KTH, Kinetics-400.
+       Metrics used are accuracy, and model got 92.9%
+    }
+    Strengths {
+      - Model demostrated the ability to capture the long temporal dependencies between video frames,
+    }
+    Weaknesses {
+        - the incorporation of 3D convolution and multi-scale Transformer has led to an increase in the model’s parameter count and complexity.
+    }
+    Key Takeways {
+      - HAR models can be categorized into four types: 3D CNN, two-stage network, Transformer, and graph convolutional (GCN).
+      - Two stream networks extract spatiotemporal features throught two seperate 
+    }
+  }
 }
 
 
