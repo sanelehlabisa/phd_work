@@ -31,21 +31,27 @@ University of KwaZulu-Natal \\
 % Abstract
 % =============================
 \begin{abstract}
-	The rise of surveillance cameras in urban areas necessitates automated systems for real-time detection of abnormal activities, essential for enhancing public safety.
-	Traditional monitoring methods are often labor-intensive and prone to errors, especially in crowded environments.
-	This research explores existing models, but finds that they often overfit due to their complexity and the staged nature of many datasets, making it difficult to generalize.
-	Additionally, the problem resembles a multi-class classification challenge that demands significant computational resources, highlighting the need for smaller, more efficient models.
-
-	Consequently, we focus on a ConvLSTM model as the base architecture, which
-	incorporates biases that facilitate faster learning. We address challenges
-	posed by small and staged datasets, including the UCF-Crime and DCSASS
-	datasets, which limit generalization capabilities. Our proposed modifications
-	to the ConvLSTM architecture achieved state-of-the-art performance, with
-	precision, recall, F1-score, and accuracy averaging 96.15\%, 97.72\%, 97.43\%,
-	and 97.37\%, respectively, across the Abnormal Activities, University of
-	Central Florida, and AIRLab datasets. By effectively capturing spatio-temporal
-	features from video data, this research contributes to developing robust
-	surveillance systems that enhance public safety in diverse settings.
+    The rapid deployment of surveillance cameras in urban environments demands
+	robust, automated systems for the real-time detection of abnormal activities
+	to ensure public safety. Traditional manual monitoring is inherently 
+	labor-intensive and highly prone to human error, particularly in crowded 
+	scenes. While existing deep learning models offer promising solutions, 
+	they frequently overfit due to excessive architectural complexity and 
+	the limited scale of available datasets, severely hindering generalization. 
+	Furthermore, multi-class video classification naturally demands significant
+	computational resources, highlighting an urgent need for smaller, highly 
+	efficient models. Consequently, we optimize a lightweight ConvLSTM 
+	architecture designed to effectively capture spatio-temporal features while
+	aggressively filtering static background noise. Our customized ConvLSTM model
+	achieved state-of-the-art efficiency and performance, with precision, recall,
+	F1-score, and accuracy averaging 96.15\%, 97.72\%, 97.43\%, and 97.37\%, 
+	respectively, across the Abnormal Activities and AIRTLab Violence Detection 
+	datasets. By drastically reducing parameter count without sacrificing accuracy,
+	this research demonstrates that highly optimized spatiotemporal networks are 
+	extremely viable, paving the way for scalable, real-time anomaly detection on
+	resource-constrained edge devices.
+	\vspace{1em}
+	\noindent\textbf{Keywords:} Abnormal Activity Recognition, ConvLSTM, Violence Detection, Video Surveillance, Lightweight Deep Learning, Edge Computing.
 \end{abstract}
 
 % =============================
@@ -151,8 +157,6 @@ PCANet, CNN, and SVM classifiers for surveillance video analysis. Their model
 achieved an accuracy of 88\% and an F1-score of 85\%. However, the approach
 suffered from overfitting and inconsistent performance across different
 datasets.
-
-TODO: **********************
 
 Similarly, Rehman et al. \cite{rehman2022} introduced an
 Internet-of-Things-based suspicious activity recognition framework using
