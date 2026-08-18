@@ -398,6 +398,9 @@ University of KwaZulu-Natal \\
 		Params = \sum_{l=1}^{L} (\text{weights}_l + \text{biases}_l)
 		\label{eq:param_count}
 	\end{equation}
+	where $\text{weights}_l$ and $\text{biases}_l$ are the learnable parameters of 
+	layer $l$, and $L$ is the total number of trainable layers in the network.
+
 	To address the tendency of heavy networks to overfit on small datasets, an empirical sensitivity analysis was conducted. We began with the original ConvLSTM~\cite{vrskova2022} architecture and systematically reduced its parameter count by decreasing the number of filters until the validation loss curve ceased overfitting and reached a stable saturation point. This established a minimum viable baseline capacity. From this baseline, we evaluated various custom filter configurations across the Convolutional and Linear layers, while keeping the LSTM temporal window constant. Ultimately, the \textbf{Custom (64-32-16-64)} configuration emerged as the optimal architecture, providing sufficient representational capacity to track complex motion dynamics without memorizing the training data.
 
 	Tables~\ref{tab:aad_results} and~\ref{tab:vdd_results} present the comparative performance of the evaluated architectures, including the proposed Custom ConvLSTM configurations, the original baseline, a lightweight ablation, and standard PyTorch 3D CNNs.
