@@ -2,6 +2,8 @@
 
 % Packages
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -9,12 +11,13 @@
 \usepackage{hyperref}
 \usepackage{array}
 \usepackage{algorithm}
-\usepackage{algorithmic}
 \usepackage[margin=1in]{geometry}
 \usepackage{amssymb}
 \usepackage{algpseudocode}
 \usepackage{xcolor}
 \usepackage{titlesec}
+
+\newcommand{\R}{\mathbb{R}}
 % =============================
 % Title
 % =============================
@@ -63,6 +66,7 @@ University of KwaZulu-Natal \\
 	% Introduction
 	% =============================
 	\section{Introduction}
+	\label{sec:introduction}
 
 	Surveillance cameras are now widely deployed in public spaces such as shopping
 	malls, universities, transportation hubs, airports, and smart cities to improve
@@ -131,17 +135,20 @@ University of KwaZulu-Natal \\
 		full-network fine-tuning across different datasets.
 	\end{itemize}
 
-	The remainder of this paper is organized as follows: Section 2 explores related work
-	and existing techniques for human activity recognition in surveillance video.
-	Section 3 details the proposed lightweight ConvLSTM methodology and the empirical
-	architecture optimization process. Section 4 presents the experimental setup, empirical
-	results, and a comparative discussion against state-of-the-art models. Finally, Section
-	5 concludes the paper and outlines directions for future research.
+	The remainder of this paper is organized as follows:
+	Section~\ref{sec:related-work} explores related work and existing techniques for human
+	activity recognition in surveillance video. Section~\ref{sec:proposed-method} details
+	the problem formulation, proposed lightweight ConvLSTM architecture, and training
+	procedure. Section~\ref{sec:results} presents the experimental
+	setup, empirical results, and a comparative discussion against state-of-the-art models.
+	Finally, Section~\ref{sec:conclusion} concludes the paper and outlines directions for
+	future research.
 
 	% =============================
 	% Related Work
 	% =============================
 	\section{Related Work}
+	\label{sec:related-work}
 
 	HAR from video and sensor data has attracted sustained research attention due to its 
 	relevance to public safety, healthcare monitoring, and intelligent surveillance systems.
@@ -259,8 +266,10 @@ University of KwaZulu-Natal \\
 	% Proposed Method
 	% =============================
 	\section{Proposed Method}
+	\label{sec:proposed-method}
 
-	\section{Problem Formulation}
+	\subsection{Problem Formulation}
+	\label{sec:problem-formulation}
 
     This work addresses the problem of classifying anomalous human activities in surveillance video through a spatio-temporal deep learning framework. Let a video be represented as an ordered sequence of $T$ frames,
 
@@ -287,10 +296,15 @@ University of KwaZulu-Natal \\
 
     This formulation motivates the architectural choice made in Section~\ref{sec:architecture}: because $\varphi$ must model both intra-frame spatial patterns (posture, object interaction) and inter-frame temporal dynamics (motion, sequence progression) within a single differentiable function, a Convolutional LSTM (ConvLSTM) is adopted so that $\varphi$ performs joint spatio-temporal representation learning rather than treating the two aspects with separate, disjoint models.
 
-    \section{Model Architecture}
+    \subsection{Model Architecture}
     \label{sec:architecture}
 
-    Following prior evidence that ConvLSTM effectively couples spatial and temporal feature learning [4, 5, 15], the proposed encoder $\varphi$ stacks five stages: (i) per-frame spatial feature extraction, (ii) temporal sequence modeling, (iii) feature stabilization, (iv) spatial feature refinement, and (v) classification. Each stage is formalized below.
+    Following prior evidence that ConvLSTM effectively couples spatial and temporal
+    feature learning~\cite{xingjian2015convlstm,vrskova2022,
+    vrskova2023_3dcnn_convlstm}, the proposed encoder $\varphi$ stacks five stages:
+    (i) per-frame spatial feature extraction, (ii) temporal sequence modeling,
+    (iii) feature stabilization, (iv) spatial feature refinement, and
+    (v) classification. Each stage is formalized below.
 
     The model consumes a mini-batch of clips of shape
 
@@ -301,7 +315,7 @@ University of KwaZulu-Natal \\
 
     where $B$ is the batch size, $T$ the clip length, $C$ the channel count, and $H \times W$ the frame resolution.
 
-    \subsection{Stage 1 --- TimeDistributed spatial encoding}
+    \subsubsection{Stage 1 --- TimeDistributed spatial encoding}
 
     A 2-D convolution with kernel $W_s$ is applied independently to every frame via time distribution, sharing weights across the temporal axis:
 
@@ -312,21 +326,40 @@ University of KwaZulu-Natal \\
 
     Applying the same kernel at every time step keeps the parameter count independent of $T$ and produces a per-frame feature map sequence $(x_1, \ldots, x_T)$ that preserves frame order, which the recurrent stage below requires.
 
-    \subsection{Stage 2 --- ConvLSTM2D temporal modeling}
+    \subsubsection{Stage 2 --- ConvLSTM2D temporal modeling}
 
-    The frame-level features are passed to a ConvLSTM2D layer, which replaces the fully connected products of a standard LSTM with convolutions so that the hidden and cell states retain spatial structure. At each step $t$:
+    The frame-level features are passed to a ConvLSTM2D layer, which replaces the
+    fully connected products of a standard LSTM with convolutions so that the hidden
+    and cell states retain spatial structure.
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{figures/conv_lstm_architecture.jpg}
+        \caption{A single ConvLSTM cell and its gated state transitions, adapted
+        from Vrskova et al.~\cite{vrskova2022}.}
+        \label{fig:convlstm-cell}
+    \end{figure}
+
+    Figure~\ref{fig:convlstm-cell} shows how one ConvLSTM cell combines the current
+    spatial input $x_t$ with the previous hidden and cell states. Its gates control what
+    information is retained in $C_t$ and exposed through $H_t$, preserving spatial
+    structure while accumulating temporal context.
+
+    At each time step $t$, the cell operations are defined as
 
     \begin{align}
         i_t &= \sigma\big(W_{xi} * x_t + W_{hi} * H_{t-1} + W_{ci} \circ C_{t-1} + b_i\big), \label{eq:input_gate} \\
         f_t &= \sigma\big(W_{xf} * x_t + W_{hf} * H_{t-1} + W_{cf} \circ C_{t-1} + b_f\big), \label{eq:forget_gate} \\
         C_t &= f_t \circ C_{t-1} + i_t \circ \tanh\big(W_{xc} * x_t + W_{hc} * H_{t-1} + b_c\big), \label{eq:cell_state} \\
         o_t &= \sigma\big(W_{xo} * x_t + W_{ho} * H_{t-1} + W_{co} \circ C_t + b_o\big), \label{eq:output_gate} \\
-        H_t &= o_t \circ \tanh(C_t), \label{eq:hidden_state}
+        H_t &= o_t \circ \tanh(C_t). \label{eq:hidden_state}
     \end{align}
 
-    where ``$*$'' denotes convolution, ``$\circ$'' the Hadamard product, $\sigma(\cdot)$ the logistic sigmoid, and $i_t, f_t, o_t$ the input, forget, and output gates that regulate what enters, is retained in, and is exposed from the cell state $C_t$. Because every gate is computed by convolution rather than matrix multiplication, $H_t$ and $C_t$ remain 3-D tensors that encode spatial position alongside the accumulated temporal context, which is what allows the layer to model motion patterns that are localized within the frame. The final hidden state $H_T$ summarizes the full clip.
+    Here ``$*$'' denotes convolution, ``$\circ$'' the Hadamard product, and
+    $\sigma(\cdot)$ the logistic sigmoid. The final hidden state $H_T$ summarizes the
+    full clip.
 
-    \subsection{Stage 3 --- Batch normalization}
+    \subsubsection{Stage 3 --- Batch normalization}
 
     To stabilize the distribution of activations entering the next convolution, batch normalization is applied channel-wise over the mini-batch:
 
@@ -337,7 +370,7 @@ University of KwaZulu-Natal \\
 
     where $\mu$ and $\sigma^2$ are the batch mean and variance of $H_T$, and $\gamma, \beta$ are learned scale and shift parameters. This reduces internal covariate shift and, empirically, allows a higher learning rate without divergence.
 
-    \subsection{Stage 4 --- Spatial feature refinement}
+    \subsubsection{Stage 4 --- Spatial feature refinement}
 
     A second 2-D convolution refines the normalized spatio-temporal feature map:
 
@@ -355,7 +388,7 @@ University of KwaZulu-Natal \\
 
     Inverted dropout scaling (division by $1-p$) keeps the expected activation magnitude unchanged at inference time, when no units are dropped.
 
-    \subsection{Stage 5 --- Classification head}
+    \subsubsection{Stage 5 --- Classification head}
 
     The refined feature map is flattened to a vector $v \in \R^{d}$ and passed through two fully connected layers:
 
@@ -397,7 +430,7 @@ University of KwaZulu-Natal \\
 
     Lines 1--3 correspond to Stage 1 (Eq.~\eqref{eq:stage1}), lines 5--9 to Stage 2 (Eqs.~\eqref{eq:input_gate}--\eqref{eq:hidden_state}), line 10 to Stage 3 (Eq.~\eqref{eq:batchnorm}), lines 11--12 to Stage 4 (Eqs.~\eqref{eq:stage4}--\eqref{eq:dropout1}), and lines 13--16 to Stage 5 (Eqs.~\eqref{eq:fc1}--\eqref{eq:softmax}), giving a one-to-one correspondence between the algorithm and the equations defining $\varphi$ and $g$ in Section~\ref{sec:architecture}.
 
-    \section{Training Procedure}
+    \subsection{Training Procedure}
     \label{sec:training}
 
     The network is trained end-to-end in a supervised setting on labeled activity clips $\{(V^{(n)}, y^{(n)})\}_{n=1}^{N}$, where $y^{(n)}$ is a one-hot encoding of the ground-truth class over $K$ categories. The objective is the categorical cross-entropy loss
@@ -437,6 +470,7 @@ University of KwaZulu-Natal \\
 	% Experimental Results and Discussion
 	% =============================
 	\section{Experimental Results and Discussion}
+	\label{sec:results}
 
 	This section discusses the experimental setup, model evaluation, and comparative analysis across two standard abnormal human activity recognition benchmarks. All experiments were conducted on a Google Colab virtual machine equipped with a 12-core x86\_64 CPU, 167~GB RAM, and an NVIDIA A100 Tensor Core GPU (40~GB VRAM, CUDA 13.0, driver 580.82.07). The implementation used PyTorch 2.x with the torchvision library for video I/O and the torchmetrics library for evaluation.
 
@@ -586,6 +620,7 @@ University of KwaZulu-Natal \\
 	% Conclusion and Future Work
 	% =============================
 	\section{Conclusion and Future Work}
+	\label{sec:conclusion}
 
 	This paper presented a lightweight ConvLSTM architecture for abnormal human activity 
 	recognition in surveillance video. Following an empirical capacity search from the 
