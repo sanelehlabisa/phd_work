@@ -10,12 +10,14 @@
 
 ## Workflow
 
-1. Read the relevant paper files and `ai/work/` guidance before making changes.
+1. Read the relevant paper files and the guidance in `agents/`.
 2. If a request is ambiguous, ask short, specific questions before editing.
-3. Create the next `ai/work/NNN-short-title/` directory for substantial work.
-4. Copy `ai/work/prompt.md` into that directory and complete it.
-5. Return the completed prompt to the user for approval before execution.
-6. After approval, make only the agreed changes, verify the PDF build, and update the ticket status.
+3. Create the next `agents/work/NNN-short-title/` directory for substantial work.
+4. Use `agents/prompt.md` to create the ticket's `prompt.md`.
+5. Ask the user focused questions until the ticket is clear.
+6. Return the completed prompt to the user for approval before execution.
+7. After approval, make only the agreed changes and verify them.
+8. Set the prompt status to `Done` and create `completion.md` from `agents/completion.md`.
 
 Small typo fixes or explanations do not require a ticket unless the user asks for one.
 
@@ -26,4 +28,4 @@ Small typo fixes or explanations do not require a ticket unless the user asks fo
 - Ask before changing the paper structure, research claims, or bibliography.
 - Keep generated LaTeX files out of source changes unless explicitly requested.
 - Never delete user content without explicit approval.
-- Follow `ai/work/rules.md` and `ai/work/config.md`.
+- Follow `agents/rules.md` and `agents/config.md`.
