@@ -1,0 +1,234 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{cite}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+% =============================
+% Title
+% =============================
+\title{
+    Abnormal Human Activity Recognition in Video Surveillance: A Review
+}
+\author{Sanele Hlabisa \\
+University of KwaZulu-Natal \\
+\texttt{218023135@stu.ukzn.ac.za}}
+\date{}
+
+\begin{document}
+
+    \maketitle
+
+    % =============================
+    % Abstract
+    % =============================
+    \begin{abstract}
+        % Summarise the motivation, review scope, method, main themes, key gaps,
+        % and overall conclusion. Write this after completing the paper.
+    \end{abstract}
+
+    % Add four to six searchable terms after completing the abstract.
+    % \noindent\textbf{Keywords:} keyword one, keyword two, keyword three
+
+    % =============================
+    % Introduction
+    % =============================
+    \section{Introduction}
+    \label{sec:introduction}
+    % Introduce the review problem and explain why a synthesis of the field is needed.
+
+    \subsection{Background and Motivation}
+    \label{subsec:background-motivation}
+    % Establish the importance of automated abnormal-activity recognition in
+    % surveillance video and the practical motivation for reviewing the field.
+
+    \subsection{Review Aim and Questions}
+    \label{subsec:review-aim-questions}
+    % State one clear aim and a small set of questions about methods, datasets,
+    % evaluation, limitations, and unresolved problems.
+
+    \subsection{Scope and Boundaries}
+    \label{subsec:scope-boundaries}
+    % Define what the review includes and excludes, such as video surveillance,
+    % activity classification, violence detection, and video anomaly detection.
+
+    \subsection{Paper Organization}
+    \label{subsec:paper-organization}
+    % Give a short roadmap of the remaining sections after the structure is stable.
+
+    % =============================
+    % Review Method
+    % =============================
+    \section{Review Method}
+    \label{sec:review-method}
+    % Explain the transparent process used to find, select, and analyse studies.
+
+    \subsection{Search Strategy}
+    \label{subsec:search-strategy}
+    % Record databases, exact search terms, publication-date coverage, and the
+    % date on which each search was last performed.
+
+    \subsection{Inclusion and Exclusion Criteria}
+    \label{subsec:selection-criteria}
+    % Define the study types, surveillance setting, input modality, language,
+    % publication type, and other criteria used to retain or reject papers.
+
+    \subsection{Study Selection}
+    \label{subsec:study-selection}
+    % Describe duplicate removal, title and abstract screening, full-text
+    % assessment, and the number of papers retained at each stage.
+
+    \subsection{Data Extraction and Categorization}
+    \label{subsec:data-extraction}
+    % List the information collected from each paper and explain how studies are
+    % grouped by task, method family, dataset, supervision, metrics, and limitations.
+
+    % =============================
+    % Domain Foundations
+    % =============================
+    \section{Abnormal Activity Recognition in Video Surveillance}
+    \label{sec:domain-foundations}
+    % Establish the concepts needed to compare the reviewed studies consistently.
+
+    \subsection{Terminology and Task Formulations}
+    \label{subsec:terminology-tasks}
+    % Define abnormal activity recognition and distinguish activity classification,
+    % violence detection, and video anomaly detection.
+
+    \subsection{Surveillance-Video Challenges}
+    \label{subsec:surveillance-challenges}
+    % Synthesise recurring challenges such as limited labels, class imbalance,
+    % low resolution, occlusion, viewpoint changes, and long untrimmed videos.
+
+    % =============================
+    % Datasets and Evaluation
+    % =============================
+    \section{Datasets and Evaluation}
+    \label{sec:datasets-evaluation}
+    % Explain how data and evaluation choices affect the comparability of results.
+
+    \subsection{Benchmark Datasets}
+    \label{subsec:benchmark-datasets}
+    % Compare each relevant dataset by source, scale, classes, annotation level,
+    % realism, availability, and known limitations.
+
+    \subsection{Evaluation Metrics}
+    \label{subsec:evaluation-metrics}
+    % Define the metrics used in the reviewed studies and explain which task and
+    % class-balance conditions each metric represents well.
+
+    \subsection{Evaluation Protocols}
+    \label{subsec:evaluation-protocols}
+    % Compare data splits, cross-validation, cross-dataset testing, preprocessing,
+    % and other protocol differences that influence reported performance.
+
+    % =============================
+    % Recognition Approaches
+    % =============================
+    \section{Recognition Approaches}
+    \label{sec:recognition-approaches}
+    % Organise the literature by method family and synthesise progress over time.
+
+    \subsection{Traditional Methods}
+    \label{subsec:traditional-methods}
+    % Review handcrafted spatial and motion features with classical classifiers,
+    % focusing on their role, strengths, and limitations.
+
+    \subsection{CNN-Based Methods}
+    \label{subsec:cnn-methods}
+    % Review frame-based CNNs, transfer learning, and methods that aggregate
+    % spatial features across frames.
+
+    \subsection{3D CNN Methods}
+    \label{subsec:3d-cnn-methods}
+    % Explain how 3D convolutions model space and time, then compare their
+    % performance, data requirements, and computational cost.
+
+    \subsection{CNN--RNN and ConvLSTM Methods}
+    \label{subsec:cnn-rnn-convlstm-methods}
+    % Compare recurrent temporal models, including LRCN, LSTM, bidirectional
+    % variants, and ConvLSTM, noting how spatial and temporal features interact.
+
+    \subsection{Transformer-Based Methods}
+    \label{subsec:transformer-methods}
+    % Review attention-based video models, their ability to capture long-range
+    % relationships, and their dependence on data and computational resources.
+
+    % =============================
+    % Comparative Analysis
+    % =============================
+    \section{Comparative Analysis}
+    \label{sec:comparative-analysis}
+    % Compare evidence across method families without treating incompatible
+    % datasets, metrics, or evaluation protocols as directly equivalent.
+
+    \subsection{Recognition Performance}
+    \label{subsec:recognition-performance}
+    % Compare results only under compatible settings and explain the factors that
+    % may account for meaningful differences.
+
+    \subsection{Computational Efficiency}
+    \label{subsec:computational-efficiency}
+    % Compare model size, operations, throughput, latency, and hardware reporting
+    % where these details are available.
+
+    \subsection{Generalization to Real Surveillance Conditions}
+    \label{subsec:real-world-generalization}
+    % Assess cross-scene and cross-dataset evidence, robustness to realistic
+    % conditions, false alarms, and practical deployment constraints.
+
+    % =============================
+    % Research Gaps and Future Directions
+    % =============================
+    \section{Research Gaps and Future Directions}
+    \label{sec:research-gaps}
+    % Derive each gap from repeated evidence in the reviewed literature and link
+    % it to a concrete research opportunity.
+
+    \subsection{Dataset Limitations}
+    \label{subsec:dataset-limitations}
+    % Identify limitations in dataset size, diversity, realism, annotation quality,
+    % class balance, and access that remain unresolved across studies.
+
+    \subsection{Robustness and Generalization}
+    \label{subsec:robustness-generalization}
+    % Identify weaknesses in transfer across cameras, scenes, populations,
+    % activity classes, and surveillance domains.
+
+    \subsection{Computational Cost}
+    \label{subsec:computational-cost}
+    % Examine the gap between reported recognition performance and the efficiency
+    % required for scalable or real-time surveillance deployment.
+
+    \subsection{Explainability and Localization}
+    \label{subsec:explainability-localization}
+    % Assess limitations in explaining decisions and locating when and where an
+    % abnormal event occurs.
+
+    \subsection{Positioning of the PhD Research}
+    \label{subsec:phd-positioning}
+    % Connect the strongest evidence-backed gaps to the planned PhD contribution
+    % without making unsupported novelty or performance claims.
+
+    % =============================
+    % Conclusion
+    % =============================
+    \section{Conclusion}
+    \label{sec:conclusion}
+    % Answer the review questions, summarise the strongest findings and gaps, and
+    % close without introducing new evidence.
+
+    % =============================
+    % References
+    % =============================
+    \bibliographystyle{IEEEtran}
+    \bibliography{references}
+
+\end{document}
