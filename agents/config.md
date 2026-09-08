@@ -4,6 +4,7 @@
 - Structure: One directory per paper.
 - Source: LaTeX (`.tex`), BibTeX (`.bib`), and figures.
 - Work directory: `agents/work/NNN-short-title/`.
+- Templates: `agents/templates/prompt.md` and `agents/templates/completion.md`.
 - Ticket numbers: Start at `001` and increase sequentially.
 - Build: Use the project command when provided; otherwise use `latexmk -pdf <main.tex>`.
 - References: Resolve all citations and bibliography entries in the final build.
